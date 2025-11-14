@@ -3,22 +3,89 @@
 @theme {
   --color-primary: #78158e;
   --color-primary-dark-pink: #cc0df8;
-  --color-primary-text-dark-pink: #78158e;
-  --color-button-black: #000000;
-  --color-messages-unread: #fcf1ff;
-  --color-message-bubble: #cc0df8;
-  --color-model-online-notify: #04d900;
-  --color-coin: #f4900c;
-  --color-coins-card-bottom: #fae2ff;
-  --color-coins-card-top: #e057ff;
+  --color-pink-600: #cc0df8;
+    --color-pink-700: #b00ad6;
+    --color-pink-400: #e057ff;
 }
 
 @layer utilities {
   .scrollbar-stable {
     scrollbar-gutter: stable;
   }
+    .aspect-3\/4 {
+      aspect-ratio: 3/4;
+    }
+    }
+  
+    @custom-variant dark (&:where(.dark, .dark *));
+  
+    html,
+    body {
+      font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 16px;
+    }
+  
+    * {
+      box-sizing: border-box;
+    }
+  
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+  
+    /* Custom scrollbar for webkit browsers */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+  
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+  
+    ::-webkit-scrollbar-thumb {
+      background: #cc0df8;
+      border-radius: 4px;
+    }
+  
+    ::-webkit-scrollbar-thumb:hover {
+      background: #b00ad6;
+    }
+  
+    /* Dark mode scrollbar */
+    html.dark ::-webkit-scrollbar-track {
+      background: #1f2937;
 }
 
+html.dark ::-webkit-scrollbar-thumb {
+  background: #cc0df8;
+}
+
+html.dark ::-webkit-scrollbar-thumb:hover {
+  background: #e057ff;
+}
+
+/* Selection */
+::selection {
+  background: #fcc1ff;
+  color: #000000;
+}
+
+html.dark ::selection {
+  background: #78158e;
+  color: #ffffff;
+}
+
+/* Line clamp utility */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 @custom-variant dark (&:where(.dark, .dark *));
 
 @media only screen and (max-width: 768px) {

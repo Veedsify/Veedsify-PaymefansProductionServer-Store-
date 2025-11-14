@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
 import ThemeInitializer from "@/components/ThemeInitializer";
-import Link from "next/link";
-import Image from "next/image";
-import OuterNav from "@/components/OuterNav";
-import QueryProvider from "@/utils/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";import QueryProvider from "@/utils/queryClient";
+;
 
 const font = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -55,11 +53,14 @@ export default function RootLayout({
         <meta property="og:image" content="/site/logo.svg" />
       </head>
       <body
-        className={`${font.className} font-sans antialiased bg-white dark:bg-gray-950 flex flex-col min-h-screen`}
+        className={`${font.className} font-sans antialiased bg-white dark:bg-gray-900 flex flex-col min-h-screen`}
       >
-        <ThemeInitializer />
         <QueryProvider>
+          <ThemeInitializer />
+          <Navbar />
           <main className="flex-1 pb-20 md:pb-0">{children}</main>
+          <Footer />
+          <BottomNav />
         </QueryProvider>
       </body>
     </html>

@@ -3,6 +3,89 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  compiler: {
+    removeConsole: {
+      exclude: ["error", "warn"],
+    },
+  },
+  experimental: {
+    optimizePackageImports: ["lucide-react", "react-icons"],
+    esmExternals: true,
+  },
+  // Move server external packages to the correct location
+  serverExternalPackages: ["hls.js", "socket.io-client"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/photos/**",
+      },
+      {
+        protocol: "https",
+        hostname: "videos.pexels.com",
+        pathname: "/video-files/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3009",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "127.0.0.1",
+        port: "3009",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "3000",
+        pathname: "/uploads/**",
+      },
+      {
+        protocol: "https",
+        hostname: "imagedelivery.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "customer-6lygbkywiu1pj547.cloudflarestream.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "d2389neb6gppcb.cloudfront.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/dafftcpbr/**",
+      },
+      {
+        protocol: "https",
+        hostname: "flagcdn.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.paymefans.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.paymefans.shop",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -1,3 +1,19 @@
+# Paymefans Store - Standalone eCommerce Application
+
+A fully functional standalone eCommerce store built with Next.js 15, featuring modern UI design, state management with Zustand, and mock data for development.
+
+## 🚀 Features
+
+- **Product Listing**: Browse products with pagination and "Load More" functionality
+- **Product Details**: View detailed product information with image gallery
+- **Shopping Cart**: Add/remove items, adjust quantities, view cart summary
+- **Wishlist**: Save favorite products for later
+- **Checkout**: Complete order form with shipping address
+- **Order History**: View past orders with status tracking
+- **Responsive Design**: Mobile-first design that works on all devices
+- **Dark Mode**: Full dark mode support
+- **State Management**: Persistent cart and wishlist using Zustand with localStorage
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
