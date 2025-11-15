@@ -29,7 +29,11 @@ const page = () => {
       return res.data;
     },
     onSuccess: (data) => {
-      router.push("/store");
+      if (!data.error) {
+        router.push("/store");
+      } else {
+        toast.error(data.message);
+      }
     },
     onError: (error: any) => {
       toast.error(

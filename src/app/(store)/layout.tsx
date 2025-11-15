@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import ThemeInitializer from "@/components/ThemeInitializer";
 import { QueryClientProvider } from "@tanstack/react-query";import QueryProvider from "@/utils/queryClient";
 import { UserProvider } from "@/contexts/userContext";
+import { Toaster } from "react-hot-toast";
 ;
 
 const font = Bricolage_Grotesque({
@@ -58,6 +59,19 @@ export default function RootLayout({
       >
         <QueryProvider>
           <UserProvider>
+            <Toaster
+              toastOptions={{
+                duration: 5000,
+                style: {
+                  fontSize: "14px",
+                  fontWeight: "500",
+                  border: "1px solid #CC0DF8",
+                  borderRadius: "100vmax",
+                },
+                className:
+                  "dark:bg-gray-900 dark:text-white dark:border-gray-600",
+              }}
+            />
             <ThemeInitializer />
             <Navbar />
             <main className="flex-1 pb-20 md:pb-0">{children}</main>
