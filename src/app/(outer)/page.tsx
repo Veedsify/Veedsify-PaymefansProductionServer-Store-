@@ -7,8 +7,10 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import axiosInstance from "@/utils/Axios";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const router = useRouter();
   const [showQuestion, setShowQuestion] = useState(true);
   const [showLoginPage, setShowLoginPage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -24,7 +26,9 @@ const page = () => {
       });
       return res.data;
     },
-    onSuccess: (data) => {},
+    onSuccess: (data) => {
+      router.push("/store");
+    },
     onError: (error: any) => {
       toast.error(
         error.response?.data?.message ||

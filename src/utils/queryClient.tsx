@@ -1,8 +1,9 @@
 "use client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 const QueryProvider = ({ children }: { children: ReactNode }) => {
+  const [isHydrated, setIsHydrated] = useState(false);
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
@@ -17,6 +18,10 @@ const QueryProvider = ({ children }: { children: ReactNode }) => {
       },
     },
   });
+
+  useEffect(() => setIsHydrated(true), []);
+
+  if (!isHydrated) return null;
 
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>

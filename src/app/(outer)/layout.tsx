@@ -1,13 +1,7 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque } from "next/font/google";
-import "./globals.css";
-import Navbar from "@/components/Navbar";
-import BottomNav from "@/components/BottomNav";
-import Footer from "@/components/Footer";
+import "../globals.css";
 import ThemeInitializer from "@/components/ThemeInitializer";
-import Link from "next/link";
-import Image from "next/image";
-import OuterNav from "@/components/OuterNav";
 import QueryProvider from "@/utils/queryClient";
 
 const font = Bricolage_Grotesque({

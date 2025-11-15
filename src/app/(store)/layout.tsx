@@ -6,6 +6,7 @@ import BottomNav from "@/components/BottomNav";
 import Footer from "@/components/Footer";
 import ThemeInitializer from "@/components/ThemeInitializer";
 import { QueryClientProvider } from "@tanstack/react-query";import QueryProvider from "@/utils/queryClient";
+import { UserProvider } from "@/contexts/userContext";
 ;
 
 const font = Bricolage_Grotesque({
@@ -56,11 +57,13 @@ export default function RootLayout({
         className={`${font.className} font-sans antialiased bg-white dark:bg-gray-900 flex flex-col min-h-screen`}
       >
         <QueryProvider>
-          <ThemeInitializer />
-          <Navbar />
-          <main className="flex-1 pb-20 md:pb-0">{children}</main>
-          <Footer />
-          <BottomNav />
+          <UserProvider>
+            <ThemeInitializer />
+            <Navbar />
+            <main className="flex-1 pb-20 md:pb-0">{children}</main>
+            <Footer />
+            <BottomNav />
+          </UserProvider>
         </QueryProvider>
       </body>
     </html>

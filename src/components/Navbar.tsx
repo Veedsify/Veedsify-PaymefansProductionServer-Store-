@@ -49,7 +49,7 @@ export default function Navbar() {
 
   const navItems = [
     {
-      href: "/",
+      href: "/store",
       icon: Home,
       label: "Store",
       active: pathname === "/",

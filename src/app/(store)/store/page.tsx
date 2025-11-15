@@ -6,12 +6,14 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import ProductCard from "@/components/ProductCard";
 import { mockProducts } from "@/data/mock-data";
 import type { StoreProduct } from "@/types";
+import { useUserContext } from "@/contexts/userContext";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [categorizedProducts, setCategorizedProducts] = useState<
     Record<string, StoreProduct[]>
   >({});
+  const user = useUserContext((state) => state.user);
 
   useEffect(() => {
     // Group products by category
@@ -33,6 +35,7 @@ export default function Home() {
     <div className="min-h-dvh bg-white dark:bg-gray-950">
       <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <header className="mb-8">
+          <h2 className="text-lg font-semibold">HI {user?.name}</h2>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl mb-2">
             Shop by Category
           </h1>

@@ -8,7 +8,7 @@ import { useCartStore } from "@/stores/cartStore";
 import { useState } from "react";
 
 export default function WishlistPage() {
-  const { items, removeFromWishlist, clearWishlist } = useWishlistStore();
+  const { items, removeFromWishlist, clearWishlist, getWishlistCount } = useWishlistStore();
   const { addToCart } = useCartStore();
   const [addedToCart, setAddedToCart] = useState<number | null>(null);
 

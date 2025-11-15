@@ -4,9 +4,9 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
   compiler: {
-    removeConsole: {
-      exclude: ["error", "warn"],
-    },
+    // removeConsole: {
+    //   exclude: ["error", "warn"],
+    // },
   },
   experimental: {
     optimizePackageImports: ["lucide-react", "react-icons"],
