@@ -30,7 +30,8 @@ const page = () => {
     },
     onSuccess: (data) => {
       if (!data.error) {
-        router.push("/store");
+        console.log(data);
+        // router.push("/store");
       } else {
         toast.error(data.message);
       }
