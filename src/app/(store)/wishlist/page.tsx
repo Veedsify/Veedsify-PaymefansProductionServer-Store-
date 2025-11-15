@@ -40,7 +40,7 @@ export default function WishlistPage() {
               Save items you love to your wishlist
             </p>
             <Link
-              href="/"
+              href="/store"
               className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
             >
               Start Shopping
@@ -128,7 +128,7 @@ export default function WishlistPage() {
 
         <div className="mt-8 text-center">
           <Link
-            href="/"
+            href="/store"
             className="inline-block px-6 py-3 border-2 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-lg hover:border-pink-600 dark:hover:border-pink-400 transition-colors font-semibold"
           >
             Continue Shopping

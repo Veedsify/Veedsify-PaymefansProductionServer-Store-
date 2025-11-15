@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, ChangeEvent, FormEvent, useLayoutEffect } from "react";
 import { LucideEye, LucideEyeClosed } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,9 +8,11 @@ import toast from "react-hot-toast";
 import axiosInstance from "@/utils/Axios";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { useUserContext } from "@/contexts/userContext";
 
 const page = () => {
   const router = useRouter();
+  const user = useUserContext((state) => state.user);
   const [showQuestion, setShowQuestion] = useState(true);
   const [showLoginPage, setShowLoginPage] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -50,6 +52,12 @@ const page = () => {
     e.preventDefault();
     loginMutate();
   };
+
+  useLayoutEffect(() => {
+    if (user && showLoginPage) {
+      router.push("/store");
+    }
+  }, [user, showLoginPage]);
 
   if (showQuestion) {
     return (
@@ -207,7 +215,7 @@ const page = () => {
                   type="submit"
                   className="w-full px-4 py-3 text-sm font-semibold text-white rounded-xl bg-primary-dark-pink hover:bg-pink-400 transition-all duration-200 shadow-lg hover:shadow-primary-dark-pink/25 hover:shadow-xl active:scale-[0.98]"
                 >
-                  Log In
+                  {isPending ? "Logging in..." : "Log In"}
                 </button>
               </form>
             </div>
@@ -240,14 +248,6 @@ const page = () => {
       </div>
     );
   }
-
-  return (
-    <div className="min-h-dvh bg-black">
-      <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        Sign Up Page
-      </section>
-    </div>
-  );
 };
 
 export default page;

@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/store" className="flex items-center gap-2">
             <Image
               src={"/logos/logo1.svg"}
               alt="Logo"
@@ -44,7 +44,7 @@ export default function Footer() {
               Contact
             </a>
             <Link
-              href="/"
+              href="https://paymefans.com"
               className="text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 transition-colors"
             >
               Back to Profile

@@ -1,23 +1,32 @@
 "use client";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, AlertCircle } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ProductCard from "@/components/ProductCard";
-import { mockProducts } from "@/data/mock-data";
 import type { StoreProduct } from "@/types";
 import { useUserContext } from "@/contexts/userContext";
+import { useStoreProducts } from "@/hooks/useStoreProducts";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [categorizedProducts, setCategorizedProducts] = useState<
-    Record<string, StoreProduct[]>
-  >({});
   const user = useUserContext((state) => state.user);
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useStoreProducts();
 
-  useEffect(() => {
-    // Group products by category
-    const grouped = mockProducts.reduce((acc, product) => {
+  // Flatten all pages of products and group by category
+  const categorizedProducts = useMemo(() => {
+    if (!data?.pages) return {};
+
+    const allProducts = data.pages.flatMap((page) => page.data || []);
+
+    return allProducts.reduce((acc, product) => {
       const category = product.category.name;
       if (!acc[category]) {
         acc[category] = [];
@@ -25,11 +34,34 @@ export default function Home() {
       acc[category].push(product);
       return acc;
     }, {} as Record<string, StoreProduct[]>);
-    setCategorizedProducts(grouped);
-    setIsLoading(false);
-  }, []);
+  }, [data]);
 
   const categories = Object.keys(categorizedProducts);
+
+  if (isError) {
+    return (
+      <div className="min-h-dvh bg-white dark:bg-gray-950">
+        <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center justify-center min-h-96">
+            <AlertCircle className="w-16 h-16 mb-4 text-red-500" />
+            <h2 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">
+              Failed to load products
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 mb-4">
+              {(error as any)?.response?.data?.message ||
+                "Something went wrong. Please try again later."}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-2 text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-dvh bg-white dark:bg-gray-950">
@@ -88,6 +120,21 @@ export default function Home() {
                 </div>
               );
             })}
+
+            {/* Load More Button */}
+            {hasNextPage && (
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
+                  className="px-8 py-3 text-white bg-pink-600 rounded-lg hover:bg-pink-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isFetchingNextPage
+                    ? "Loading more..."
+                    : "Load More Products"}
+                </button>
+              </div>
+            )}
           </div>
         )}
       </section>

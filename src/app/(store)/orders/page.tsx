@@ -1,13 +1,21 @@
 "use client";
-import { Package, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Package,
+  ChevronDown,
+  ChevronUp,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import numeral from "numeral";
 import { useState } from "react";
+import { useUserOrders } from "@/hooks/useCheckout";
 import { useOrderStore } from "@/stores/orderStore";
+import { OrderItem } from "@/types";
 
 export default function OrdersPage() {
-  const { orders } = useOrderStore();
+  const { data, isLoading, isError, error } = useUserOrders();
   const [expandedOrders, setExpandedOrders] = useState<number[]>([]);
 
   const toggleOrderExpansion = (orderId: number) => {
@@ -44,6 +52,54 @@ export default function OrdersPage() {
     });
   };
 
+  const orders = data?.data || [];
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-white dark:bg-gray-950 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+            My Orders
+          </h1>
+          <div className="flex flex-col items-center justify-center py-16">
+            <Loader2 className="w-16 h-16 text-pink-600 animate-spin mb-4" />
+            <p className="text-gray-600 dark:text-gray-300">
+              Loading your orders...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (isError) {
+    return (
+      <section className="py-16 bg-white dark:bg-gray-950 min-h-screen">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+            My Orders
+          </h1>
+          <div className="flex flex-col items-center justify-center py-16">
+            <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+              Failed to load orders
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              {(error as any)?.response?.data?.message ||
+                "Something went wrong. Please try again later."}
+            </p>
+            <button
+              onClick={() => window.location.reload()}
+              className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   if (orders.length === 0) {
     return (
       <section className="py-16 bg-white dark:bg-gray-950 min-h-screen">
@@ -63,7 +119,7 @@ export default function OrdersPage() {
               Start shopping to create your first order
             </p>
             <Link
-              href="/"
+              href="/store"
               className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
             >
               Start Shopping
@@ -82,7 +138,7 @@ export default function OrdersPage() {
             My Orders ({orders.length})
           </h1>
           <Link
-            href="/"
+            href="/store"
             className="text-pink-600 dark:text-pink-400 hover:underline font-semibold"
           >
             Continue Shopping
@@ -90,7 +146,7 @@ export default function OrdersPage() {
         </div>
 
         <div className="space-y-6">
-          {orders.map((order) => {
+          {orders.map((order: any) => {
             const isExpanded = expandedOrders.includes(order.id);
 
             return (
@@ -103,10 +159,11 @@ export default function OrdersPage() {
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
                     <div>
                       <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                        Order #{order.orderId}
+                        Order #{order.order_id || order.orderId}
                       </h3>
                       <p className="text-sm text-gray-600 dark:text-gray-300">
-                        Placed on {formatDate(order.createdAt)}
+                        Placed on{" "}
+                        {formatDate(order.created_at || order.createdAt)}
                       </p>
                     </div>
                     <div className="flex items-center gap-4">
@@ -143,7 +200,10 @@ export default function OrdersPage() {
                       {order.items.length > 1 ? "s" : ""}
                     </p>
                     <p className="text-xl font-bold text-pink-600 dark:text-pink-400">
-                      ₦ {numeral(order.total).format("0,0.00")}
+                      ₦{" "}
+                      {numeral(order.total_amount || order.total).format(
+                        "0,0.00"
+                      )}
                     </p>
                   </div>
                 </div>
@@ -157,7 +217,7 @@ export default function OrdersPage() {
                         Order Items
                       </h4>
                       <div className="space-y-4">
-                        {order.items.map((item) => (
+                        {order.items.map((item: OrderItem) => (
                           <div key={item.id} className="flex gap-4">
                             <Link href={`/product/${item.product.product_id}`}>
                               <Image
@@ -181,7 +241,8 @@ export default function OrdersPage() {
                               </Link>
                               <p className="text-sm text-gray-600 dark:text-gray-300">
                                 Quantity: {item.quantity}
-                                {item.size && ` | Size: ${item.size}`}
+                                {item.size?.name &&
+                                  ` | Size: ${item.size.name}`}
                               </p>
                               <p className="text-sm font-semibold text-pink-600 dark:text-pink-400 mt-1">
                                 ₦{" "}
@@ -202,14 +263,25 @@ export default function OrdersPage() {
                       </h4>
                       <div className="text-sm text-gray-600 dark:text-gray-300">
                         <p className="font-semibold text-gray-900 dark:text-white">
-                          {order.shippingAddress.fullName}
+                          {order.shipping_address?.name ||
+                            order.shippingAddress?.fullName}
                         </p>
-                        <p>{order.shippingAddress.phone}</p>
-                        <p>{order.shippingAddress.address}</p>
                         <p>
-                          {order.shippingAddress.city},{" "}
-                          {order.shippingAddress.state}{" "}
-                          {order.shippingAddress.zipCode}
+                          {order.shipping_address?.phone ||
+                            order.shippingAddress?.phone}
+                        </p>
+                        <p>
+                          {order.shipping_address?.address ||
+                            order.shippingAddress?.address}
+                        </p>
+                        <p>
+                          {order.shipping_address?.city ||
+                            order.shippingAddress?.city}
+                          ,{" "}
+                          {order.shipping_address?.state ||
+                            order.shippingAddress?.state}{" "}
+                          {order.shipping_address?.country ||
+                            order.shippingAddress?.zipCode}
                         </p>
                       </div>
                     </div>

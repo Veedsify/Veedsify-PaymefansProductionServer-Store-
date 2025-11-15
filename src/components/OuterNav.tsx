@@ -30,7 +30,7 @@ const OuterNav = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-4">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/store" className="flex items-center gap-2">
               <Image
                 src={"/logos/logo1.svg"}
                 alt="Logo"

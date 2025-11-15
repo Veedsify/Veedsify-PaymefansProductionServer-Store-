@@ -9,6 +9,7 @@ interface WishlistStore {
   isInWishlist: (productId: number) => boolean;
   clearWishlist: () => void;
   getWishlistCount: () => number;
+  setWishlist: (products: StoreProduct[]) => void;
 }
 
 export const useWishlistStore = create<WishlistStore>()(
@@ -51,6 +52,14 @@ export const useWishlistStore = create<WishlistStore>()(
 
       getWishlistCount: () => {
         return get().items.length;
+      },
+
+      setWishlist: (products) => {
+        const wishlistItems: WishlistItem[] = products.map((product) => ({
+          id: product.id,
+          product,
+        }));
+        set({ items: wishlistItems });
       },
     }),
     {

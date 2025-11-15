@@ -2,33 +2,47 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import numeral from "numeral";
+import toast from "react-hot-toast";
+import { Loader2, ArrowLeft } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
-import { useOrderStore } from "@/stores/orderStore";
-import type { ShippingAddress, Order } from "@/types";
+import { useCheckout } from "@/hooks/useCheckout";
+import { useUserContext } from "@/contexts/userContext";
+
+type ShippingAddress = {
+  name: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+};
 
 export default function CheckoutPage() {
   const router = useRouter();
-  const { items, clearCart, total } = useCartStore();
-  const { addOrder } = useOrderStore();
+  const items = useCartStore((state) => state.items);
+  const user = useUserContext((s) => s.user);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const cartTotal = useCartStore((state) => state.total());
 
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
-    fullName: "",
+    name: user?.name ?? "",
     phone: "",
     address: "",
     city: "",
     state: "",
-    zipCode: "",
+    country: "Nigeria",
   });
 
-  const [isProcessing, setIsProcessing] = useState(false);
   const [errors, setErrors] = useState<Partial<ShippingAddress>>({});
+  const checkoutMutation = useCheckout();
 
   const validateForm = (): boolean => {
     const newErrors: Partial<ShippingAddress> = {};
 
-    if (!shippingAddress.fullName.trim()) {
-      newErrors.fullName = "Full name is required";
+    if (!shippingAddress.name.trim()) {
+      newErrors.name = "Full name is required";
     }
     if (!shippingAddress.phone.trim()) {
       newErrors.phone = "Phone number is required";
@@ -42,8 +56,8 @@ export default function CheckoutPage() {
     if (!shippingAddress.state.trim()) {
       newErrors.state = "State is required";
     }
-    if (!shippingAddress.zipCode.trim()) {
-      newErrors.zipCode = "ZIP code is required";
+    if (!shippingAddress.country.trim()) {
+      newErrors.country = "Country is required";
     }
 
     setErrors(newErrors);
@@ -62,42 +76,65 @@ export default function CheckoutPage() {
     e.preventDefault();
 
     if (!validateForm()) {
+      toast.error("Please fill in all required fields");
       return;
     }
 
     if (items.length === 0) {
+      toast.error("Your cart is empty");
       return;
     }
 
-    setIsProcessing(true);
+    const checkoutItems = items.map((item) => ({
+      product_id: item.product.product_id,
+      quantity: item.quantity,
+      size_id: item.selectedSize
+        ? item.product.sizes.find((s) => s.size.name === item.selectedSize)
+            ?.size.id
+        : undefined,
+    }));
 
-    // Simulate order processing
-    setTimeout(() => {
-      const newOrder: Order = {
-        id: Date.now(),
-        orderId: `ORD-${new Date().getFullYear()}-${Math.floor(
-          Math.random() * 10000
-        )
-          .toString()
-          .padStart(4, "0")}`,
-        items: items.map((item) => ({
-          id: item.id,
-          product: item.product,
-          quantity: item.quantity,
-          size: item.selectedSize,
-          price: item.product.price,
-        })),
-        total: total(),
-        status: "pending",
-        createdAt: new Date().toISOString(),
-        shippingAddress,
-      };
+    checkoutMutation.mutate(
+      {
+        items: checkoutItems,
+        shipping_address: shippingAddress,
+        payment_method: "paystack",
+      },
+      {
+        onSuccess: (data: any) => {
+          if (data.error) {
+            toast.error(data.message || "Checkout failed");
+            return;
+          }
 
-      addOrder(newOrder);
-      clearCart();
-      setIsProcessing(false);
-      router.push(`/orders`);
-    }, 2000);
+          toast.success("Order placed! Redirecting to payment...");
+
+          // Store order info for post-payment handling
+          if (data.data?.reference) {
+            localStorage.setItem("pendingOrderReference", data.data.reference);
+          }
+          if (data.data?.order_id) {
+            localStorage.setItem("pendingOrderId", data.data.order_id);
+          }
+
+          // DON'T clear cart here - only clear after successful payment verification
+          // This prevents showing empty cart when users return before payment completes
+
+          // Redirect to Paystack payment page
+          if (data.data?.payment_url) {
+            window.location.href = data.data.payment_url;
+          } else {
+            toast.error("Payment URL not received");
+          }
+        },
+        onError: (error: any) => {
+          toast.error(
+            error?.response?.data?.message ||
+              "Checkout failed. Please try again."
+          );
+        },
+      }
+    );
   };
 
   if (items.length === 0) {
@@ -112,7 +149,7 @@ export default function CheckoutPage() {
               Add items to your cart before checking out
             </p>
             <a
-              href="/"
+              href="/store"
               className="inline-block px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
             >
               Continue Shopping
@@ -126,9 +163,18 @@ export default function CheckoutPage() {
   return (
     <section className="py-8 bg-white dark:bg-gray-950 min-h-screen pb-20 md:pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
-          Checkout
-        </h1>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Checkout
+          </h1>
+          <Link
+            href="/cart"
+            className="flex items-center gap-2 text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Cart
+          </Link>
+        </div>
 
         <div className="lg:grid lg:grid-cols-3 lg:gap-8">
           {/* Shipping Form */}
@@ -142,28 +188,26 @@ export default function CheckoutPage() {
                 <div className="space-y-4">
                   <div>
                     <label
-                      htmlFor="fullName"
+                      htmlFor="name"
                       className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                     >
-                      Full Name
+                      Full Name *
                     </label>
                     <input
                       type="text"
-                      id="fullName"
-                      value={shippingAddress.fullName}
+                      id="name"
+                      value={shippingAddress.name}
                       onChange={(e) =>
-                        handleInputChange("fullName", e.target.value)
+                        handleInputChange("name", e.target.value)
                       }
                       className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-600 focus:border-transparent dark:bg-gray-700 dark:text-white ${
-                        errors.fullName
+                        errors.name
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-600"
                       }`}
                     />
-                    {errors.fullName && (
-                      <p className="mt-1 text-sm text-red-500">
-                        {errors.fullName}
-                      </p>
+                    {errors.name && (
+                      <p className="mt-1 text-sm text-red-500">{errors.name}</p>
                     )}
                   </div>
 
@@ -172,7 +216,7 @@ export default function CheckoutPage() {
                       htmlFor="phone"
                       className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                     >
-                      Phone Number
+                      Phone Number *
                     </label>
                     <input
                       type="tel"
@@ -227,7 +271,7 @@ export default function CheckoutPage() {
                         htmlFor="city"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                       >
-                        City
+                        City *
                       </label>
                       <input
                         type="text"
@@ -254,7 +298,7 @@ export default function CheckoutPage() {
                         htmlFor="state"
                         className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                       >
-                        State
+                        State *
                       </label>
                       <input
                         type="text"
@@ -279,27 +323,31 @@ export default function CheckoutPage() {
 
                   <div>
                     <label
-                      htmlFor="zipCode"
+                      htmlFor="country"
                       className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
                     >
-                      ZIP Code
+                      Country *
                     </label>
-                    <input
-                      type="text"
-                      id="zipCode"
-                      value={shippingAddress.zipCode}
+                    <select
+                      id="country"
+                      value={shippingAddress.country}
                       onChange={(e) =>
-                        handleInputChange("zipCode", e.target.value)
+                        handleInputChange("country", e.target.value)
                       }
                       className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-600 focus:border-transparent dark:bg-gray-700 dark:text-white ${
-                        errors.zipCode
+                        errors.country
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-600"
                       }`}
-                    />
-                    {errors.zipCode && (
+                    >
+                      <option value="Nigeria">Nigeria</option>
+                      <option value="Ghana">Ghana</option>
+                      <option value="Kenya">Kenya</option>
+                      <option value="South Africa">South Africa</option>
+                    </select>
+                    {errors.country && (
                       <p className="mt-1 text-sm text-red-500">
-                        {errors.zipCode}
+                        {errors.country}
                       </p>
                     )}
                   </div>
@@ -308,10 +356,17 @@ export default function CheckoutPage() {
 
               <button
                 type="submit"
-                disabled={isProcessing}
-                className="w-full px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={checkoutMutation.isPending}
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isProcessing ? "Processing Order..." : "Place Order"}
+                {checkoutMutation.isPending ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    Processing Order...
+                  </>
+                ) : (
+                  `Place Order - ₦${numeral(cartTotal).format("0,0.00")}`
+                )}
               </button>
             </form>
           </div>
@@ -360,7 +415,7 @@ export default function CheckoutPage() {
                     Subtotal
                   </span>
                   <span className="font-semibold text-gray-900 dark:text-white">
-                    ₦ {numeral(total()).format("0,0.00")}
+                    ₦ {numeral(cartTotal).format("0,0.00")}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -376,7 +431,7 @@ export default function CheckoutPage() {
                     Total
                   </span>
                   <span className="text-lg font-bold text-pink-600 dark:text-pink-400">
-                    ₦ {numeral(total()).format("0,0.00")}
+                    ₦ {numeral(cartTotal).format("0,0.00")}
                   </span>
                 </div>
               </div>

@@ -2,36 +2,36 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ProductCard from "@/components/ProductCard";
-import { mockProducts } from "@/data/mock-data";
+import { useStoreProducts } from "@/hooks/useStoreProducts";
+
 import type { StoreProduct } from "@/types";
 
 export default function CategoryPage() {
   const params = useParams();
   const categorySlug = params.slug as string;
-  const [isLoading, setIsLoading] = useState(true);
-  const [products, setProducts] = useState<StoreProduct[]>([]);
-  const [categoryName, setCategoryName] = useState("");
+  const { data: productsData, isLoading } = useStoreProducts(100);
 
-  useEffect(() => {
-    // Convert slug back to category name
+  // Convert slug to category name and filter products
+  const { categoryName, products } = useMemo(() => {
     const name = categorySlug
       .split("-")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
 
-    setCategoryName(name);
+    if (!productsData?.pages) {
+      return { categoryName: name, products: [] };
+    }
 
-    // Filter products by category
-    const filtered = mockProducts.filter(
+    const allProducts = productsData.pages.flatMap((page) => page.data);
+    const filtered = allProducts.filter(
       (product) => product.category.name.toLowerCase() === name.toLowerCase()
     );
 
-    setProducts(filtered);
-    setIsLoading(false);
-  }, [categorySlug]);
+    return { categoryName: name, products: filtered };
+  }, [categorySlug, productsData]);
 
   if (isLoading) {
     return (
@@ -46,7 +46,7 @@ export default function CategoryPage() {
       <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link
-          href="/"
+          href="/store"
           className="inline-flex items-center gap-2 mb-6 text-slate-600 dark:text-slate-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -77,7 +77,7 @@ export default function CategoryPage() {
               No products found in this category
             </p>
             <Link
-              href="/"
+              href="/store"
               className="px-6 py-3 font-semibold text-white rounded-lg bg-pink-600 hover:bg-pink-700 transition-colors"
             >
               Browse All Products

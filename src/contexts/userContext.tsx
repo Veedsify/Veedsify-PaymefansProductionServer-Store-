@@ -28,7 +28,6 @@ export const useUserContext = create<UserContext>()((set) => ({
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const updateUser = useUserContext((state) => state.updateUser);
-  const user = useUserContext((state) => state.user);
 
   useEffect(() => {
     async function getUser() {

@@ -3,6 +3,7 @@ import { Bricolage_Grotesque } from "next/font/google";
 import "../globals.css";
 import ThemeInitializer from "@/components/ThemeInitializer";
 import QueryProvider from "@/utils/queryClient";
+import { UserProvider } from "@/contexts/userContext";
 
 const font = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -53,7 +54,9 @@ export default function RootLayout({
       >
         <ThemeInitializer />
         <QueryProvider>
-          <main className="flex-1 pb-20 md:pb-0">{children}</main>
+          <UserProvider>
+            <main className="flex-1 pb-20 md:pb-0">{children}</main>
+          </UserProvider>
         </QueryProvider>
       </body>
     </html>

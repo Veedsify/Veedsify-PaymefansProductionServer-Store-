@@ -10,7 +10,7 @@ import {
   Instagram,
   Youtube,
 } from "lucide-react";
-import { mockProducts } from "@/data/mock-data";
+import { useStoreProducts } from "@/hooks/useStoreProducts";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -19,14 +19,18 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [categories, setCategories] = useState<string[]>([]);
+  const { data: productsData } = useStoreProducts(50);
 
   useEffect(() => {
-    // Get unique categories from products
-    const uniqueCategories = Array.from(
-      new Set(mockProducts.map((product) => product.category.name))
-    );
-    setCategories(uniqueCategories);
-  }, []);
+    // Get unique categories from all fetched products
+    if (productsData?.pages) {
+      const allProducts = productsData.pages.flatMap((page) => page.data);
+      const uniqueCategories = Array.from(
+        new Set(allProducts.map((product) => product.category.name))
+      );
+      setCategories(uniqueCategories);
+    }
+  }, [productsData]);
 
   // Close sidebar when clicking outside
   useEffect(() => {
@@ -60,7 +64,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-slate-800">
-            <Link href="/" onClick={onClose}>
+            <Link href="/store" onClick={onClose}>
               <Image
                 src={"/logos/logo1.svg"}
                 alt="Logo"
@@ -125,7 +129,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                   <ChevronRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
                 <Link
-                  href="/"
+                  href="https://paymefans.com"
                   onClick={onClose}
                   className="flex items-center justify-between px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-pink-600 dark:hover:text-pink-400 transition-colors group"
                 >

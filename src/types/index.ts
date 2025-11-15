@@ -16,6 +16,7 @@ export type StoreProduct = {
   sizes: {
     size: {
       name: string;
+      id: number;
     };
   }[];
 };
@@ -55,7 +56,9 @@ export type OrderItem = {
   id: number;
   product: StoreProduct;
   quantity: number;
-  size?: string;
+  size?: {
+    name: string;
+  };
   price: number;
 };
 

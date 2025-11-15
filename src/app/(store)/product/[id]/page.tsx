@@ -7,64 +7,59 @@ import {
   Share2,
   ChevronLeft,
   ChevronRight,
-  Star,
   Truck,
   Shield,
   RotateCcw,
+  AlertCircle,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import numeral from "numeral";
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { getProductById } from "@/data/mock-data";
 import { useCartStore } from "@/stores/cartStore";
 import { useWishlistStore } from "@/stores/wishlistStore";
-import type { StoreProduct } from "@/types";
+import { useProduct } from "@/hooks/useStoreProducts";
+import { useToggleWishlist } from "@/hooks/useWishlist";
 
 export default function ProductDetail() {
   const params = useParams();
   const productId = params.id as string;
 
-  const [product, setProduct] = useState<StoreProduct | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data, isLoading, isError, error } = useProduct(productId);
+  const product = data?.data;
+
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
 
   const { addToCart } = useCartStore();
-  const { addToWishlist, isInWishlist, removeFromWishlist } =
+  const { isInWishlist, addToWishlist, removeFromWishlist } =
     useWishlistStore();
+  const { toggleWishlist, isLoading: isTogglingWishlist } = useToggleWishlist();
 
+  // Set initial size when product loads
   useEffect(() => {
-    // Simulate loading
-    setTimeout(() => {
-      const foundProduct = getProductById(productId);
-      setProduct(foundProduct || null);
-      if (foundProduct && foundProduct.sizes.length > 0) {
-        setSelectedSize(foundProduct.sizes[0].size.name);
-      }
-      setIsLoading(false);
-    }, 300);
-  }, [productId]);
+    if (product && product.sizes.length > 0 && !selectedSize) {
+      setSelectedSize(product.sizes[0].size.name);
+    }
+  }, [product, selectedSize]);
 
   const handleAddToCart = () => {
     if (product) {
       addToCart(product, quantity, selectedSize);
       setShowSuccess(true);
+      toast.success(`Added ${quantity} item(s) to cart`);
       setTimeout(() => setShowSuccess(false), 2000);
     }
   };
 
   const handleWishlistToggle = () => {
     if (product) {
-      if (isInWishlist(product.id)) {
-        removeFromWishlist(product.id);
-      } else {
-        addToWishlist(product);
-      }
+      toggleWishlist(product.id, product);
     }
   };
 
@@ -82,20 +77,49 @@ export default function ProductDetail() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-white dark:bg-gray-950">
         <LoadingSpinner text="Loading product..." />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-gray-950">
+        <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          Failed to load product
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400 mb-4">
+          {(error as any)?.response?.data?.message ||
+            "Product not found or an error occurred"}
+        </p>
+        <div className="flex gap-4">
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
+          >
+            Retry
+          </button>
+          <Link
+            href="/store"
+            className="px-6 py-3 border-2 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-lg hover:border-pink-600 dark:hover:border-pink-400 transition-colors font-semibold"
+          >
+            Return to Store
+          </Link>
+        </div>
       </div>
     );
   }
 
   if (!product) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-gray-950">
         <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
           Product not found
         </h1>
         <Link
-          href="/"
+          href="/store"
           className="text-pink-600 dark:text-pink-400 hover:underline"
         >
           Return to Store
@@ -113,7 +137,7 @@ export default function ProductDetail() {
         {/* Breadcrumb */}
         <div className="mb-6">
           <Link
-            href="/"
+            href="/store"
             className="inline-flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
           >
             <ChevronLeft className="w-4 h-4" />
@@ -177,7 +201,7 @@ export default function ProductDetail() {
             {/* Thumbnail Preview */}
             {product.images.length > 1 && (
               <div className="grid grid-cols-4 gap-4">
-                {product.images.map((image, index) => (
+                {product.images.map((image: any, index: number) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImageIndex(index)}
@@ -209,7 +233,8 @@ export default function ProductDetail() {
               </h1>
               <button
                 onClick={handleWishlistToggle}
-                className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors"
+                disabled={isTogglingWishlist}
+                className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Add to wishlist"
               >
                 <Heart
@@ -301,7 +326,7 @@ export default function ProductDetail() {
                   Select Size
                 </h2>
                 <div className="flex flex-wrap gap-3">
-                  {product.sizes.map((sizeObj, index) => (
+                  {product.sizes.map((sizeObj: any, index: number) => (
                     <button
                       key={index}
                       onClick={() => setSelectedSize(sizeObj.size.name)}

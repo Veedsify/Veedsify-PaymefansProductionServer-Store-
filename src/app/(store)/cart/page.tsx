@@ -6,8 +6,19 @@ import numeral from "numeral";
 import { useCartStore } from "@/stores/cartStore";
 
 export default function CartPage() {
-  const { items, removeFromCart, updateQuantity, clearCart, total } =
-    useCartStore();
+  // Subscribe to cart state for reactivity
+  const items = useCartStore((state) => state.items);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const cartTotal = useCartStore((state) => state.total());
+
+  // Calculate totals reactively
+  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+  const subtotal = items.reduce(
+    (sum, item) => sum + item.product.price * item.quantity,
+    0
+  );
 
   const handleQuantityChange = (itemId: number, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -33,7 +44,7 @@ export default function CartPage() {
               Start shopping to add items to your cart
             </p>
             <Link
-              href="/"
+              href="/store"
               className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
             >
               Continue Shopping
@@ -158,11 +169,11 @@ export default function CartPage() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-300">
-                    Subtotal (
-                    {items.reduce((sum, item) => sum + item.quantity, 0)} items)
+                    Subtotal ({totalItems} {totalItems === 1 ? "item" : "items"}
+                    )
                   </span>
                   <span className="font-semibold text-gray-900 dark:text-white">
-                    ₦ {numeral(total()).format("0,0.00")}
+                    ₦ {numeral(subtotal).format("0,0.00")}
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -179,7 +190,7 @@ export default function CartPage() {
                       Total
                     </span>
                     <span className="text-lg font-bold text-pink-600 dark:text-pink-400">
-                      ₦ {numeral(total()).format("0,0.00")}
+                      ₦ {numeral(subtotal).format("0,0.00")}
                     </span>
                   </div>
                 </div>
@@ -193,7 +204,7 @@ export default function CartPage() {
               </Link>
 
               <Link
-                href="/"
+                href="/store"
                 className="block w-full text-center px-6 py-3 border-2 border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white rounded-lg hover:border-pink-600 dark:hover:border-pink-400 transition-colors font-semibold"
               >
                 Continue Shopping

@@ -1,19 +1,24 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import type { Order } from "@/types";
-import { mockOrders } from "@/data/mock-data";
 
 interface OrderStore {
   orders: Order[];
+  setOrders: (orders: Order[]) => void;
   addOrder: (order: Order) => void;
   getOrders: () => Order[];
   getOrderById: (orderId: string) => Order | undefined;
+  clearOrders: () => void;
 }
 
 export const useOrderStore = create<OrderStore>()(
   persist(
     (set, get) => ({
-      orders: mockOrders,
+      orders: [],
+
+      setOrders: (orders) => {
+        set({ orders });
+      },
 
       addOrder: (order) => {
         set((state) => ({
@@ -27,6 +32,10 @@ export const useOrderStore = create<OrderStore>()(
 
       getOrderById: (orderId) => {
         return get().orders.find((order) => order.orderId === orderId);
+      },
+
+      clearOrders: () => {
+        set({ orders: [] });
       },
     }),
     {

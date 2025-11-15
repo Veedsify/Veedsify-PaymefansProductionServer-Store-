@@ -21,8 +21,10 @@ export default function Navbar() {
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { getItemCount } = useCartStore();
-  const { getWishlistCount } = useWishlistStore();
+
+  // Subscribe to cart and wishlist counts for reactivity
+  const cartCount = useCartStore((state) => state.getItemCount());
+  const wishlistCount = useWishlistStore((state) => state.getWishlistCount());
 
   useEffect(() => {
     setMounted(true);
@@ -43,9 +45,6 @@ export default function Navbar() {
   };
 
   if (!mounted) return null;
-
-  const cartCount = getItemCount();
-  const wishlistCount = getWishlistCount();
 
   const navItems = [
     {
@@ -93,7 +92,7 @@ export default function Navbar() {
               </button>
 
               {/* Logo */}
-              <Link href="/" className="flex items-center gap-2">
+              <Link href="/store" className="flex items-center gap-2">
                 <Image
                   src={"/logos/logo1.svg"}
                   alt="Logo"

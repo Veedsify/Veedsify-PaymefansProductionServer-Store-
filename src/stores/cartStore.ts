@@ -14,6 +14,12 @@ interface CartStore {
   clearCart: () => void;
   total: () => number;
   getItemCount: () => number;
+  getCartItems: () => CartItem[];
+  isInCart: (productId: number, selectedSize?: string) => boolean;
+  getCartItem: (
+    productId: number,
+    selectedSize?: string
+  ) => CartItem | undefined;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -78,7 +84,27 @@ export const useCartStore = create<CartStore>()(
       },
 
       getItemCount: () => {
-        return get().items.reduce((sum, item) => sum + item.quantity, 0);
+        return get().items.length || 0;
+      },
+
+      getCartItems: () => {
+        return get().items;
+      },
+
+      isInCart: (productId, selectedSize) => {
+        return get().items.some(
+          (item) =>
+            item.product.id === productId &&
+            (selectedSize === undefined || item.selectedSize === selectedSize)
+        );
+      },
+
+      getCartItem: (productId, selectedSize) => {
+        return get().items.find(
+          (item) =>
+            item.product.id === productId &&
+            (selectedSize === undefined || item.selectedSize === selectedSize)
+        );
       },
     }),
     {
