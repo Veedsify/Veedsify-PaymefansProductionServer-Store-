@@ -36,7 +36,6 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         const userData = response.data && (response.data.user as User);
         const user = response.data.user;
         updateUser(userData ? user : null);
-        console.log(response);
         if (!user) {
           router.push("/");
         }
