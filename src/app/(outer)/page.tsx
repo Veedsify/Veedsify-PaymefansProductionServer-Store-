@@ -23,7 +23,7 @@ const page = () => {
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: async () => {
-      const res = await axiosInstance.post(`/auth/login`, {
+      const res = await axiosInstance.post(`/auth/login/store`, {
         ...loginCredentials,
       });
       return res.data;
