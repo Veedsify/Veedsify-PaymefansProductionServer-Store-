@@ -4,7 +4,17 @@ class UserService {
     static async getUserById(userId: number): Promise<{
         error: boolean;
         message?: string;
-        data?: any;
+        data?: {
+            id: number;
+            email: string;
+            name: string;
+            username: string;
+            role: string;
+            is_active: boolean;
+            is_model: boolean;
+            location: string | null;
+            user_id: string;
+        };
     }> {
         try {
             if (!userId || typeof userId !== "number")
@@ -31,7 +41,7 @@ class UserService {
             return {
                 error: !user,
                 message: user ? "User found" : "User not found",
-                data: user,
+                data: user || undefined,
             };
         } catch (error) {
             console.error(error);

@@ -491,7 +491,7 @@ export default function CommunityWelcomeEmail({
 // Styles
 const main = {
   backgroundColor: "#ffffff",
-  fontFamily: "'Bricolage Grotesque', sans-serif",
+  fontFamily: "'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif",
 };
 
 const container = {
