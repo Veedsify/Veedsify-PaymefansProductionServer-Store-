@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { Loader2, ArrowLeft } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { useCheckout } from "@/hooks/useCheckout";
-import { useUserContext } from "@/contexts/userContext";
+import { useSession } from "next-auth/react";
 
 type ShippingAddress = {
   name: string;
@@ -20,14 +20,12 @@ type ShippingAddress = {
 };
 
 export default function CheckoutPage() {
-  const router = useRouter();
   const items = useCartStore((state) => state.items);
-  const user = useUserContext((s) => s.user);
-  const clearCart = useCartStore((state) => state.clearCart);
+  const { data: session } = useSession();
   const cartTotal = useCartStore((state) => state.total());
 
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
-    name: user?.name ?? "",
+    name: session?.user?.name ?? "",
     phone: "",
     address: "",
     city: "",

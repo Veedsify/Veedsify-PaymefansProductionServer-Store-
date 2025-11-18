@@ -1,34 +1,49 @@
 {
-  "name": "store",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --port 3003",
-    "build": "next build",
-    "start": "next start",
-    "lint": "biome check",
-    "format": "biome format --write"
-  },
-  "dependencies": {
-    "@tanstack/react-query": "^5.90.9",
-    "axios": "^1.13.2",
-    "lucide-react": "^0.553.0",
-    "next": "16.0.1",
-    "numeral": "^2.0.6",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "react-hot-toast": "^2.6.0",
-    "zustand": "^5.0.8"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.2.0",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/numeral": "^2.0.5",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "babel-plugin-react-compiler": "1.0.0",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+    "name": "store",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --port 3003",
+        "build": "next build",
+        "start": "next start",
+        "lint": "biome check",
+        "format": "biome format --write",
+        "dev:email": "email dev"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.19.0",
+        "@prisma/extension-accelerate": "^2.0.2",
+        "@react-email/components": "1.0.1",
+        "@tanstack/react-query": "^5.90.9",
+        "@types/jsonwebtoken": "^9.0.10",
+        "axios": "^1.13.2",
+        "bcryptjs": "^3.0.3",
+        "dotenv": "^17.2.3",
+        "inngest": "^3.45.1",
+        "ioredis": "^5.8.2",
+        "jsonwebtoken": "^9.0.2",
+        "lucide-react": "^0.553.0",
+        "next": "16.0.1",
+        "next-auth": "^5.0.0-beta.30",
+        "numeral": "^2.0.6",
+        "react": "19.2.0",
+        "react-dom": "19.2.0",
+        "react-hot-toast": "^2.6.0",
+        "zustand": "^5.0.8"
+    },
+    "devDependencies": {
+        "@biomejs/biome": "2.2.0",
+        "@react-email/preview-server": "^5.0.4",
+        "@tailwindcss/postcss": "^4",
+        "@types/node": "^20",
+        "@types/numeral": "^2.0.5",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "babel-plugin-react-compiler": "1.0.0",
+        "prisma": "^6.19.0",
+        "react-email": "5.0.4",
+        "tailwindcss": "^4",
+        "tsx": "^4.20.6",
+        "typescript": "^5"
+    }
 }

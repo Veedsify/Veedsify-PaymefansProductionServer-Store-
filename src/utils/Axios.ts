@@ -8,7 +8,6 @@ if (!process.env.NEXT_PUBLIC_TS_EXPRESS_URL) {
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_TS_EXPRESS_URL as string,
-  withCredentials: true,
 });
 
 export default axiosInstance;

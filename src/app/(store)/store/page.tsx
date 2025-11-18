@@ -5,11 +5,11 @@ import { useMemo } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import ProductCard from "@/components/ProductCard";
 import type { StoreProduct } from "@/types";
-import { useUserContext } from "@/contexts/userContext";
 import { useStoreProducts } from "@/hooks/useStoreProducts";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
-  const user = useUserContext((state) => state.user);
+  const { data: session } = useSession();
   const {
     data,
     isLoading,
@@ -67,11 +67,13 @@ export default function Home() {
     <div className="min-h-dvh bg-white dark:bg-gray-950">
       <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <header className="mb-8">
-          <h2 className="text-lg font-semibold">HI {user?.name}</h2>
+          <h2 className="text-lg font-semibold dark:text-white">
+            HI {session?.user?.name}
+          </h2>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl mb-2">
             Shop by Category
           </h1>
-          <p className="max-w-2xl text-slate-600 dark:text-slate-300">
+          <p className="max-w-2xl text-slate-600 dark:text-slate-200">
             Discover exclusive products and merchandise from your favorite
             creators. Quality items across all categories.
           </p>
