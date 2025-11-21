@@ -72,21 +72,11 @@ export async function GET(
             );
         }
 
-        const modifiedProductDetails = {
-            ...productDetails,
-            images: productDetails.images.map((image) => {
-                return {
-                    ...image,
-                    image_url: `${config.cloudFrontUrl}/${image.image_url}`,
-                };
-            }),
-        };
-
         return NextResponse.json({
-            error: false,
-            message: "Product fetched successfully",
-            status: 200,
-            data: modifiedProductDetails,
+          error: false,
+          message: "Product fetched successfully",
+          status: 200,
+          data: productDetails,
         });
     } catch (error: any) {
         console.error("Error fetching product details:", error);

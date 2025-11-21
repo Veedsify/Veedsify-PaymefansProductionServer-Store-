@@ -594,8 +594,8 @@ class OrderService {
             });
 
             const formattedOrders = orders.map((order) => ({
-                ...order,
-                shipping_address: JSON.parse(order.shipping_address as string),
+              ...order,
+              shipping_address: order.shipping_address,
             }));
 
             return {

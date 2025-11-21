@@ -25,19 +25,7 @@ export async function GET() {
     }
 
     // Format orders with CloudFront URLs
-    const formattedOrders = result?.data?.map((order: any) => ({
-      ...order,
-      items: order.items.map((item: any) => ({
-        ...item,
-        product: {
-          ...item.product,
-          images: item.product.images.map((img: any) => ({
-            ...img,
-            image_url: `${config.cloudFrontUrl}/${img.image_url}`,
-          })),
-        },
-      })),
-    }));
+    const formattedOrders = result?.data;
 
     return NextResponse.json(
       {

@@ -11,7 +11,6 @@ generator client {
 
 datasource db {
     provider = "postgresql"
-    url      = env("DATABASE_URL")
 }
 
 model User {
@@ -362,6 +361,11 @@ model Post {
     ReportPost        ReportPost[]
     UserMedia         UserMedia[]
     UserRepost        UserRepost[]
+
+    @@index([post_id])
+    @@index([user_id])
+    @@index([post_status])
+    @@index([created_at])
 }
 
 model PostImpression {
@@ -552,6 +556,10 @@ model LiveStreamParticipants {
     updated_at     DateTime    @updatedAt
     liveStreamId   Int?
     LiveStream     LiveStream? @relation(fields: [liveStreamId], references: [id])
+
+    @@index([stream_id])
+    @@index([host_id])
+    @@index([participant_id])
 }
 
 model LiveStreamComment {
@@ -592,6 +600,7 @@ model LiveStreamView {
     live       LiveStream @relation(fields: [live_id], references: [id], onDelete: Cascade)
     user       User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
+    @@index([live_id])
     @@index([user_id])
 }
 
@@ -794,6 +803,8 @@ model ModelSubscriptionTier {
     created_at              DateTime              @default(now())
     updated_at              DateTime              @updatedAt
     model_subscription_pack ModelSubscriptionPack @relation(fields: [subscription_id], references: [id], onDelete: Cascade)
+
+    @@index([subscription_id])
 }
 
 model UserSubscriptionCurrent {
@@ -822,6 +833,10 @@ model UserSubscriptionHistory {
     updated_at      DateTime @updatedAt
     model           User     @relation("UserSubscriptionHistory", fields: [model_id], references: [id], onDelete: Cascade)
     user            User     @relation("UserSubscription", fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([subscription_id])
+    @@index([user_id])
+    @@index([model_id])
 }
 
 model UserLocation {
@@ -896,6 +911,8 @@ model UserAttachments {
     updated_at DateTime @updatedAt
     user_id    Int
     user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
 }
 
 model UserBanks {
@@ -924,6 +941,8 @@ model ProductCategory {
     description String?
     created_at  DateTime  @default(now())
     product     Product[]
+
+    @@index([name])
 }
 
 model ProductSize {
@@ -951,6 +970,12 @@ model Product {
     images      ProductImages[]
     sizes       ProductSizePivot[]
     WishList    WishList[]
+    created_at  DateTime           @default(now())
+    updated_at  DateTime           @updatedAt
+
+    @@index([user_id])
+    @@index([category_id])
+    @@index([name])
 }
 
 model ProductSizePivot {
@@ -961,6 +986,9 @@ model ProductSizePivot {
     updated_at DateTime    @updatedAt
     product    Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
     size       ProductSize @relation(fields: [size_id], references: [id], onDelete: Cascade)
+
+    @@index([product_id])
+    @@index([size_id])
 }
 
 model ProductImages {
@@ -970,6 +998,8 @@ model ProductImages {
     created_at DateTime @default(now())
     updated_at DateTime @updatedAt
     product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+    @@index([product_id])
 }
 
 model Cart {
@@ -983,6 +1013,10 @@ model Cart {
     product    Product     @relation(fields: [product_id], references: [id], onDelete: Cascade)
     size       ProductSize @relation(fields: [size_id], references: [id])
     user       User        @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+    @@index([product_id])
+    @@index([size_id])
 }
 
 model WishList {
@@ -993,6 +1027,9 @@ model WishList {
     updated_at DateTime @updatedAt
     product    Product  @relation(fields: [product_id], references: [id], onDelete: Cascade)
     user       User     @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+    @@index([user_id])
+    @@index([product_id])
 }
 
 model Order {

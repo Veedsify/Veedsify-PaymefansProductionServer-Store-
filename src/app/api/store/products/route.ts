@@ -53,27 +53,13 @@ export async function GET(request: NextRequest) {
             products.pop(); // Remove the last item to fit the limit
         }
 
-        const productsWithModifyImageUrl = products.map((product) => {
-            const modifiedImages = product.images.map((image) => {
-                return {
-                    ...image,
-                    image_url: `${config.cloudFrontUrl}/${image.image_url}`,
-                };
-            });
-
-            return {
-                ...product,
-                images: modifiedImages,
-            };
-        });
-
         const response = {
-            error: false,
-            hasMore,
-            perPage: Number(limit),
-            totalProducts: countProducts,
-            message: "Products fetched successfully",
-            data: productsWithModifyImageUrl,
+          error: false,
+          hasMore,
+          perPage: Number(limit),
+          totalProducts: countProducts,
+          message: "Products fetched successfully",
+          data: products,
         };
 
         return NextResponse.json(response);

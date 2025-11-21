@@ -44,13 +44,7 @@ export async function GET(
       ...result.data,
       items: result?.data?.items.map((item: any) => ({
         ...item,
-        product: {
-          ...item.product,
-          images: item.product.images.map((img: any) => ({
-            ...img,
-            image_url: `${config.cloudFrontUrl}/${img.image_url}`,
-          })),
-        },
+        product: item.product,
       })),
     };
 
