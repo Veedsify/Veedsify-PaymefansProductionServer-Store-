@@ -11,7 +11,6 @@ export default function CartPage() {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const updateQuantity = useCartStore((state) => state.updateQuantity);
   const clearCart = useCartStore((state) => state.clearCart);
-  const cartTotal = useCartStore((state) => state.total());
 
   // Calculate totals reactively
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);

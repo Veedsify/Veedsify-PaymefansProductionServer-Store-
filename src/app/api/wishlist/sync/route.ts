@@ -32,13 +32,6 @@ export async function POST(request: Request) {
 
         const userId = Number(session.user.id);
 
-        console.log(
-            "Syncing wishlist for user:",
-            userId,
-            "with productIds:",
-            productIds,
-        );
-
         const result = await WishlistService.syncWishlist(userId, productIds);
 
         if (result.error) {

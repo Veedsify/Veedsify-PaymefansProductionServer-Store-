@@ -387,135 +387,213 @@ class OrderService {
      */
     static async verifyPayment(reference: string, userId: number) {
         try {
-            const user = await UserService.getUserById(userId);
+          const user = await UserService.getUserById(userId);
 
-            if (!user) {
-                return {
-                    error: true,
-                    message: "User doesn't exists",
-                    data: null,
-                };
-            }
+          if (!user) {
+            return {
+              error: true,
+              message: "User doesn't exists",
+              data: null,
+            };
+          }
 
-            // Find order with this reference
-            const order = await prisma.order.findFirst({
-                where: {
-                    payment_reference: reference,
-                    user_id: userId,
-                },
+          // Find order with this reference
+          const order = await prisma.order.findFirst({
+            where: {
+              payment_reference: reference,
+              user_id: userId,
+            },
+            include: {
+              items: {
                 include: {
-                    items: {
-                        include: {
-                            product: {
-                                include: {
-                                    images: true,
-                                },
-                            },
-                            size: true,
-                        },
+                  product: {
+                    include: {
+                      images: true,
                     },
+                  },
+                  size: true,
                 },
+              },
+            },
+          });
+
+          if (!order) {
+            return {
+              error: true,
+              message: "Order not found",
+            };
+          }
+
+          // Check if already verified
+          if (order.payment_status === "paid") {
+            return {
+              error: false,
+              message: "Payment already verified",
+              data: {
+                order_id: order.order_id,
+                status: order.status,
+                order,
+              },
+            };
+          }
+
+          // Verify with payment provider
+          const verificationResult =
+            await this.verifyPaystackPayment(reference);
+
+          if (verificationResult.error) {
+            // Update order status to failed
+            await prisma.order.update({
+              where: { id: order.id },
+              data: {
+                payment_status: "failed",
+                status: "cancelled",
+              },
             });
 
-            if (!order) {
-                return {
-                    error: true,
-                    message: "Order not found",
-                };
-            }
+            return {
+              error: true,
+              message: verificationResult.message,
+            };
+          }
 
-            // Check if already verified
-            if (order.payment_status === "paid") {
-                return {
-                    error: false,
-                    message: "Payment already verified",
-                    data: {
-                        order_id: order.order_id,
-                        status: order.status,
-                        order,
-                    },
-                };
-            }
-
-            // Verify with payment provider
-            const verificationResult =
-                await this.verifyPaystackPayment(reference);
-
-            if (verificationResult.error) {
-                // Update order status to failed
-                await prisma.order.update({
-                    where: { id: order.id },
-                    data: {
-                        payment_status: "failed",
-                        status: "cancelled",
-                    },
-                });
-
-                return {
-                    error: true,
-                    message: verificationResult.message,
-                };
-            }
-
-            // Update order status to paid and processing
-            const updatedOrder = await prisma.order.update({
-                where: { id: order.id },
-                data: {
-                    payment_status: "paid",
-                    status: "processing",
+          // Update order status to paid and processing
+          // Use transaction to ensure all updates succeed or fail together
+          const updatedOrder = await prisma.$transaction(async (tx) => {
+            // Update order status
+            const updated = await tx.order.update({
+              where: { id: order.id },
+              data: {
+                payment_status: "paid",
+                status: "processing",
+              },
+              include: {
+                user: {
+                  select: {
+                    name: true,
+                    email: true,
+                    username: true,
+                  },
                 },
-                include: {
-                    items: {
-                        include: {
-                            product: {
-                                include: {
-                                    images: true,
-                                },
-                            },
-                            size: true,
-                        },
+                items: {
+                  include: {
+                    product: {
+                      include: {
+                        images: true,
+                      },
                     },
+                    size: true,
+                  },
                 },
-            });
-
-            await inngest.send({
-                name: "emails/store.email",
-                data: {
-                    email: user?.data?.email,
-                },
+              },
             });
 
             // Update product stock
             for (const item of order.items) {
-                await prisma.product.update({
-                    where: { product_id: item.product_id },
-                    data: {
-                        instock: {
-                            decrement: item.quantity,
-                        },
-                    },
-                });
+              await tx.product.update({
+                where: { product_id: item.product_id },
+                data: {
+                  instock: {
+                    decrement: item.quantity,
+                  },
+                },
+              });
             }
 
             // Clear user's cart
-            await prisma.cart.deleteMany({
-                where: { user_id: userId },
+            await tx.cart.deleteMany({
+              where: { user_id: userId },
             });
 
-            return {
-                error: false,
-                message: "Payment verified successfully",
-                data: {
-                    order_id: updatedOrder.order_id,
-                    status: updatedOrder.status,
-                    order: updatedOrder,
-                },
-            };
+            return updated;
+          });
+
+          // Prepare return data first (before email sending)
+          const returnData = {
+            error: false,
+            message: "Payment verified successfully",
+            data: {
+              order_id: updatedOrder.order_id,
+              status: updatedOrder.status,
+              order: updatedOrder,
+            },
+          };
+
+          // Send order confirmation email (non-blocking)
+          if (updatedOrder.user?.email) {
+            try {
+              let shippingAddress = undefined;
+              try {
+                shippingAddress =
+                  typeof updatedOrder.shipping_address === "string"
+                    ? JSON.parse(updatedOrder.shipping_address)
+                    : updatedOrder.shipping_address;
+              } catch (parseError) {
+                console.error("Failed to parse shipping address:", parseError);
+                // Continue without shipping address in email
+              }
+
+              // Safely map items, handling missing product data
+              const emailItems = updatedOrder.items
+                .filter((item) => item.product) // Only include items with product data
+                .map((item) => ({
+                  product: {
+                    name: item.product?.name || "Unknown Product",
+                    images: item.product?.images || [],
+                  },
+                  quantity: item.quantity,
+                  price: item.price,
+                  size: item.size || null,
+                }));
+
+              // Only send email if we have valid items
+              if (emailItems.length > 0) {
+                await inngest.send({
+                  name: "orders/confirmation.send",
+                  data: {
+                    email: updatedOrder.user.email,
+                    name:
+                      updatedOrder.user.name ||
+                      updatedOrder.user.username ||
+                      "there",
+                    orderId: updatedOrder.order_id,
+                    orderDate: new Date(
+                      updatedOrder.created_at
+                    ).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    }),
+                    items: emailItems,
+                    totalAmount: updatedOrder.total_amount,
+                    shippingAddress: shippingAddress || undefined,
+                  },
+                });
+              } else {
+                console.warn(
+                  "Skipping order confirmation email: No valid items found"
+                );
+              }
+            } catch (error) {
+              console.error("Failed to queue order confirmation email:", error);
+              // Don't fail the payment verification if email queueing fails
+            }
+          }
+
+          return returnData;
         } catch (error: any) {
             console.error("Payment verification error:", error);
+            console.error("Error details:", {
+              reference,
+              userId,
+              errorMessage: error?.message,
+              errorStack: error?.stack,
+            });
             return {
-                error: true,
-                message: "Failed to verify payment",
+              error: true,
+              message:
+                error?.message ||
+                "Failed to verify payment. Please contact support with your order reference.",
             };
         }
     }
@@ -742,8 +820,26 @@ class OrderService {
             if (event === "charge.success") {
                 const reference = data.reference;
                 const order = await prisma.order.findFirst({
-                    where: { payment_reference: reference },
-                    include: { items: true },
+                  where: { payment_reference: reference },
+                  include: {
+                    user: {
+                      select: {
+                        name: true,
+                        email: true,
+                        username: true,
+                      },
+                    },
+                    items: {
+                      include: {
+                        product: {
+                          include: {
+                            images: true,
+                          },
+                        },
+                        size: true,
+                      },
+                    },
+                  },
                 });
 
                 if (!order) {
@@ -755,30 +851,122 @@ class OrderService {
 
                 // Update order if not already updated
                 if (order.payment_status !== "paid") {
-                    await prisma.order.update({
-                        where: { id: order.id },
-                        data: {
-                            payment_status: "paid",
-                            status: "processing",
+                  // Use transaction to ensure all updates succeed or fail together
+                  const updatedOrder = await prisma.$transaction(async (tx) => {
+                    // Update order status
+                    const updated = await tx.order.update({
+                      where: { id: order.id },
+                      data: {
+                        payment_status: "paid",
+                        status: "processing",
+                      },
+                      include: {
+                        user: {
+                          select: {
+                            name: true,
+                            email: true,
+                            username: true,
+                          },
                         },
+                        items: {
+                          include: {
+                            product: {
+                              include: {
+                                images: true,
+                              },
+                            },
+                            size: true,
+                          },
+                        },
+                      },
                     });
 
                     // Update product stock
                     for (const item of order.items) {
-                        await prisma.product.update({
-                            where: { product_id: item.product_id },
-                            data: {
-                                instock: {
-                                    decrement: item.quantity,
-                                },
-                            },
-                        });
+                      await tx.product.update({
+                        where: { product_id: item.product_id },
+                        data: {
+                          instock: {
+                            decrement: item.quantity,
+                          },
+                        },
+                      });
                     }
 
                     // Clear user's cart
-                    await prisma.cart.deleteMany({
-                        where: { user_id: order.user_id },
+                    await tx.cart.deleteMany({
+                      where: { user_id: order.user_id },
                     });
+
+                    return updated;
+                  });
+
+                  // Send order confirmation email (non-blocking)
+                  if (updatedOrder.user?.email) {
+                    try {
+                      let shippingAddress = undefined;
+                      try {
+                        shippingAddress =
+                          typeof updatedOrder.shipping_address === "string"
+                            ? JSON.parse(updatedOrder.shipping_address)
+                            : updatedOrder.shipping_address;
+                      } catch (parseError) {
+                        console.error(
+                          "Failed to parse shipping address:",
+                          parseError
+                        );
+                        // Continue without shipping address in email
+                      }
+
+                      // Safely map items, handling missing product data
+                      const emailItems = updatedOrder.items
+                        .filter((item) => item.product) // Only include items with product data
+                        .map((item) => ({
+                          product: {
+                            name: item.product?.name || "Unknown Product",
+                            images: item.product?.images || [],
+                          },
+                          quantity: item.quantity,
+                          price: item.price,
+                          size: item.size || null,
+                        }));
+
+                      // Only send email if we have valid items
+                      if (emailItems.length > 0) {
+                        await inngest.send({
+                          name: "orders/confirmation.send",
+                          data: {
+                            email: updatedOrder.user.email,
+                            name:
+                              updatedOrder.user.name ||
+                              updatedOrder.user.username ||
+                              "there",
+                            orderId: updatedOrder.order_id,
+                            orderDate: new Date(
+                              updatedOrder.created_at
+                            ).toLocaleDateString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                            }),
+                            items: emailItems,
+                            totalAmount: updatedOrder.total_amount,
+                            shippingAddress: shippingAddress || undefined,
+                          },
+                        });
+                      } else {
+                        console.warn(
+                          "Skipping order confirmation email: No valid items found"
+                        );
+                      }
+                    } catch (error) {
+                      console.error(
+                        "Failed to queue order confirmation email:",
+                        error
+                      );
+                      // Don't fail the webhook if email queueing fails
+                    }
+                  }
                 }
 
                 return {

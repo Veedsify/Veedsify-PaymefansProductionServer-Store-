@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@auth";
 import OrderService from "@/server/OrderService";
-import { config } from "@/utils/config";
 
 export async function GET() {
   try {

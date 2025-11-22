@@ -1,16 +1,45 @@
 import nodemailer from "nodemailer";
+import type { Transporter } from "nodemailer";
 
-const nodeConfig = nodemailer.createTransport({
-    host: process.env.MAIL_HOST as string,
-    port: process.env.MAIL_PORT,
+interface MailConfig {
+  host: string;
+  port: number;
+  auth: {
+    user: string;
+    pass: string;
+  };
+}
+
+const createTransporter = (): Transporter => {
+  const mailHost = process.env.MAIL_HOST;
+  const mailPort = process.env.MAIL_PORT;
+  const mailUser = process.env.MAIL_USER;
+  const mailPass = process.env.MAIL_PASS;
+
+  if (!mailHost || !mailPort || !mailUser || !mailPass) {
+    throw new Error(
+      "Missing email configuration. Please set MAIL_HOST, MAIL_PORT, MAIL_USER, and MAIL_PASS environment variables."
+    );
+  }
+
+  const config: MailConfig = {
+    host: mailHost,
+    port: Number(mailPort),
     auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+      user: mailUser,
+      pass: mailPass,
     },
-});
+  };
 
-const mailer = nodeConfig.on("error", (err) => {
-    console.log(err);
-});
+  const transporter = nodemailer.createTransport(config);
+
+  transporter.on("error", (err: Error) => {
+    console.error("Nodemailer error:", err);
+  });
+
+  return transporter;
+};
+
+const mailer = createTransporter();
 
 export default mailer;

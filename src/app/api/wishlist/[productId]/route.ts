@@ -4,7 +4,7 @@ import WishlistService from "@/server/WishlistService";
 
 export async function DELETE(
     request: Request,
-    { params }: { params: { productId: string } }
+    { params }: { params: Promise<{ productId: string }> }
 ) {
     try {
         const session = await auth();
@@ -20,7 +20,7 @@ export async function DELETE(
         }
 
         const userId = Number(session.user.id);
-        const productId = Number(params.productId);
+        const productId = Number((await params).productId);
 
         const result = await WishlistService.removeByProductId(
             userId,

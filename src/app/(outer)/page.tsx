@@ -64,70 +64,69 @@ const page = () => {
 
     if (showQuestion) {
         return (
-            <div className="min-h-dvh bg-black flex items-center justify-center px-4">
-                <div className="w-full max-w-md">
-                    <div className="text-center space-y-8 animate-in">
-                        {/* Logo/Brand */}
-                        <div className="space-y-2">
-                            <Link
-                                href="/"
-                                className="flex items-center gap-2 justify-center"
-                            >
-                                <Image
-                                    src={"/logos/logo4.svg"}
-                                    alt="Logo"
-                                    width={150}
-                                    height={40}
-                                    className="h-10"
-                                />
-                            </Link>
-                            <p className="text-gray-300 text-lg">
-                                Welcome! to PayMeFans Store
-                            </p>
-                        </div>
-
-                        {/* Question Card */}
-                        <div className="bg-black rounded-xl relative p-8 min-h-[60dvh] shadow-lg border border-white/10 backdrop-blur-sm">
-                            <h2 className="text-2xl font-semibold text-white mb-6">
-                                Are you already a PayMeFans user?
-                            </h2>
-                            {/* <Image
-                src={"/shop.svg"}
-                alt="Shop Illustration"
-                width={400}
-                height={300}
-                className="mx-auto mb-6"
-              /> */}
-
-                            <div className="flex flex-col w-full gap-4 left-0 p-4 absolute bottom-0">
-                                {/* Yes Button */}
-                                <button
-                                    onClick={() => {
-                                        setShowQuestion(false);
-                                        setShowLoginPage(true);
-                                    }}
-                                    className="w-full bg-primary-dark-pink hover:bg-pink-400 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg hover:shadow-primary-dark-pink/25"
-                                >
-                                    Yes, I have an account
-                                </button>
-
-                                {/* No Button */}
-                                <Link
-                                    href={"https://paymefans.com/register"}
-                                    className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 border border-white/20"
-                                >
-                                    No, I'm new here
-                                </Link>
-                            </div>
-                        </div>
-
-                        {/* Additional Info */}
-                        <p className="text-sm text-gray-400">
-                            Join thousands of creators earning with PayMeFans
-                        </p>
-                    </div>
+          <div className="min-h-dvh bg-black flex items-center justify-center px-4">
+            <div className="w-full max-w-md">
+              <div className="text-center space-y-8 animate-in">
+                {/* Logo/Brand */}
+                <div className="space-y-2">
+                  <Link
+                    href="/"
+                    className="flex items-center gap-2 justify-center"
+                  >
+                    <Image
+                      src={"/logos/logo4.svg"}
+                      alt="Logo"
+                      width={150}
+                      height={40}
+                      className="h-10"
+                    />
+                  </Link>
+                  <p className="text-gray-300 text-lg">
+                    Welcome! to PayMeFans Store
+                  </p>
                 </div>
+
+                {/* Question Card */}
+                <div className="bg-black rounded-xl relative p-8 min-h-[60dvh] shadow-lg border border-white/10 backdrop-blur-sm">
+                  <h2 className="text-2xl font-semibold text-white mb-6">
+                    Are you already a PayMeFans user?
+                  </h2>
+                  <Image
+                    src={"/cover-image.jpg"}
+                    alt="Cover Image"
+                    width={400}
+                    height={300}
+                    className="mx-auto mb-6 rounded-xl"
+                  />
+
+                  <div className="flex flex-col w-full gap-4 left-0 p-4 absolute bottom-0 rounded-xl">
+                    <button
+                      onClick={() => {
+                        setShowQuestion(false);
+                        setShowLoginPage(true);
+                      }}
+                      className="w-full bg-primary-dark-pink hover:bg-pink-400 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg hover:shadow-primary-dark-pink/25"
+                    >
+                      Yes, I have an account
+                    </button>
+
+                    {/* No Button */}
+                    <Link
+                      href={"https://paymefans.com/register"}
+                      className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 border border-white/20"
+                    >
+                      No, I'm new here
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Additional Info */}
+                <p className="text-sm text-gray-400">
+                  Join thousands of creators earning with PayMeFans
+                </p>
+              </div>
             </div>
+          </div>
         );
     }
 

@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
 import { auth } from "@auth";
 import OrderService from "@/server/OrderService";
-import { config } from "@/utils/config";
 
 export async function GET(
   request: Request,
-  { params }: { params: { orderid: string } }
+  { params }: { params: Promise<{ orderid: string }> }
 ) {
   try {
     const session = await auth();
@@ -20,7 +19,7 @@ export async function GET(
       );
     }
 
-    const { orderid } = params;
+    const { orderid } = await params;
 
     if (!orderid) {
       return NextResponse.json(
@@ -70,7 +69,7 @@ export async function GET(
 
 export async function PATCH(
   request: Request,
-  { params }: { params: { orderid: string } }
+  { params }: { params: Promise<{ orderid: string }> }
 ) {
   try {
     const session = await auth();
@@ -85,7 +84,7 @@ export async function PATCH(
       );
     }
 
-    const { orderid } = params;
+    const { orderid } = await params;
     const body = await request.json();
     const { status } = body;
 
@@ -155,7 +154,7 @@ export async function PATCH(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { orderid: string } }
+  { params }: { params: Promise<{ orderid: string }> }
 ) {
   try {
     const session = await auth();
@@ -170,7 +169,7 @@ export async function DELETE(
       );
     }
 
-    const { orderid } = params;
+    const { orderid } = await params;
 
     if (!orderid) {
       return NextResponse.json(

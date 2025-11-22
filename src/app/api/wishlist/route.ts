@@ -111,8 +111,6 @@ export async function POST(request: Request) {
 
         const userId = Number(session.user.id);
 
-        console.log("Adding to wishlist:", { userId, productId });
-
         const result = await WishlistService.addToWishlist({
             userId,
             productId: Number(productId),

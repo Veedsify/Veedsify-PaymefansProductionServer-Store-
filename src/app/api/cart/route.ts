@@ -38,31 +38,28 @@ export async function GET() {
 
         // Format cart items with CloudFront URLs
         const formattedData = result.data.map((item: any) => ({
-            id: item.id,
-            quantity: item.quantity,
-            selectedSize: item.size.name,
-            sizeId: item.size_id,
-            product: {
-                id: item.product.id,
-                name: item.product.name,
-                description: item.product.description,
-                price: item.product.price,
-                instock: item.product.instock,
-                product_id: item.product.product_id,
-                category: {
-                    name: item.product.category.name,
-                },
-                images: item.product.images.map((img: any) => ({
-                    id: img.id,
-                    image_url: `${config.cloudFrontUrl}/${img.image_url}`,
-                })),
-                sizes: item.product.sizes.map((s: any) => ({
-                    size: {
-                        id: s.size.id,
-                        name: s.size.name,
-                    },
-                })),
+          id: item.id,
+          quantity: item.quantity,
+          selectedSize: item.size.name,
+          sizeId: item.size_id,
+          product: {
+            id: item.product.id,
+            name: item.product.name,
+            description: item.product.description,
+            price: item.product.price,
+            instock: item.product.instock,
+            product_id: item.product.product_id,
+            category: {
+              name: item.product.category.name,
             },
+            images: item.product.images,
+            sizes: item.product.sizes.map((s: any) => ({
+              size: {
+                id: s.size.id,
+                name: s.size.name,
+              },
+            })),
+          },
         }));
 
         return NextResponse.json(
@@ -114,8 +111,6 @@ export async function POST(request: Request) {
         }
 
         const userId = Number(session.user.id);
-
-        console.log("Adding to cart:", { userId, productId, quantity, sizeId });
 
         const result = await CartService.addToCart({
             userId,
