@@ -55,14 +55,14 @@ export default function OrdersPage() {
 
     if (isLoading) {
         return (
-            <section className="py-16 bg-white dark:bg-gray-950 min-h-screen">
+            <section className="py-8 sm:py-16 bg-white dark:bg-gray-950 min-h-screen">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
                         My Orders
                     </h1>
-                    <div className="flex flex-col items-center justify-center py-16">
-                        <Loader2 className="w-16 h-16 text-pink-600 animate-spin mb-4" />
-                        <p className="text-gray-600 dark:text-gray-300">
+                    <div className="flex flex-col items-center justify-center py-12 sm:py-16">
+                        <Loader2 className="w-12 h-12 sm:w-16 sm:h-16 text-pink-600 animate-spin mb-4" />
+                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
                             Loading your orders...
                         </p>
                     </div>
@@ -73,23 +73,23 @@ export default function OrdersPage() {
 
     if (isError) {
         return (
-            <section className="py-16 bg-white dark:bg-gray-950 min-h-screen">
+            <section className="py-8 sm:py-16 bg-white dark:bg-gray-950 min-h-screen">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
                         My Orders
                     </h1>
-                    <div className="flex flex-col items-center justify-center py-16">
-                        <AlertCircle className="w-16 h-16 text-red-500 mb-4" />
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                    <div className="flex flex-col items-center justify-center py-12 sm:py-16">
+                        <AlertCircle className="w-12 h-12 sm:w-16 sm:h-16 text-red-500 mb-4" />
+                        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-2">
                             Failed to load orders
                         </h2>
-                        <p className="text-gray-600 dark:text-gray-300 mb-4">
+                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-4 text-center px-4">
                             {(error as any)?.response?.data?.message ||
                                 "Something went wrong. Please try again later."}
                         </p>
                         <button
                             onClick={() => window.location.reload()}
-                            className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
+                            className="px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
                         >
                             Retry
                         </button>
@@ -101,25 +101,25 @@ export default function OrdersPage() {
 
     if (orders.length === 0) {
         return (
-            <section className="py-16 bg-white dark:bg-gray-950 min-h-screen">
+            <section className="py-8 sm:py-16 bg-white dark:bg-gray-950 min-h-screen">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
                         My Orders
                     </h1>
-                    <div className="flex flex-col items-center justify-center py-16">
+                    <div className="flex flex-col items-center justify-center py-12 sm:py-16">
                         <Package
-                            size={64}
-                            className="text-gray-400 dark:text-gray-600 mb-4"
+                            size={48}
+                            className="text-gray-400 dark:text-gray-600 mb-4 sm:w-16 sm:h-16"
                         />
-                        <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+                        <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">
                             No orders yet
                         </h2>
-                        <p className="text-gray-600 dark:text-gray-300 mb-6">
+                        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-6 text-center px-4">
                             Start shopping to create your first order
                         </p>
                         <Link
                             href="/store"
-                            className="px-6 py-3 bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
+                            className="px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base bg-pink-600 text-white rounded-lg hover:bg-pink-700 transition-colors font-semibold"
                         >
                             Start Shopping
                         </Link>
@@ -130,21 +130,21 @@ export default function OrdersPage() {
     }
 
     return (
-        <section className="py-8 bg-white dark:bg-gray-950 min-h-screen pb-20 md:pb-8">
+        <section className="py-8 bg-white dark:bg-gray-950 min-h-screen pb-14 md:pb-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-6 sm:mb-8">
+                    <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                         My Orders ({orders.length})
                     </h1>
                     <Link
                         href="/store"
-                        className="text-pink-600 dark:text-pink-400 hover:underline font-semibold"
+                        className="text-sm sm:text-base text-pink-600 dark:text-pink-400 hover:underline font-semibold"
                     >
                         Continue Shopping
                     </Link>
                 </div>
 
-                <div className="space-y-6">
+                <div className="space-y-4 sm:space-y-6">
                     {orders.map((order: any) => {
                         const isExpanded = expandedOrders.includes(order.id);
 
@@ -154,15 +154,15 @@ export default function OrdersPage() {
                                 className="bg-gray-50 dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-lg overflow-hidden"
                             >
                                 {/* Order Header */}
-                                <div className="p-6">
-                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+                                <div className="p-4 sm:p-6">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 mb-3 sm:mb-4">
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                                            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
                                                 Order #
                                                 {order.order_id ||
                                                     order.orderId}
                                             </h3>
-                                            <p className="text-sm text-gray-600 dark:text-gray-300">
+                                            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                                                 Placed on{" "}
                                                 {formatDate(
                                                     order.created_at ||
@@ -170,9 +170,9 @@ export default function OrdersPage() {
                                                 )}
                                             </p>
                                         </div>
-                                        <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-3 sm:gap-4">
                                             <span
-                                                className={`px-3 py-1 rounded-full text-sm font-semibold ${getStatusColor(
+                                                className={`px-2.5 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold ${getStatusColor(
                                                     order.status,
                                                 )}`}
                                             >
@@ -187,17 +187,17 @@ export default function OrdersPage() {
                                                         order.id,
                                                     )
                                                 }
-                                                className="p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-full transition-colors"
+                                                className="p-1.5 sm:p-2 hover:bg-gray-200 dark:hover:bg-slate-800 rounded-full transition-colors"
                                             >
                                                 {isExpanded ? (
                                                     <ChevronUp
-                                                        size={20}
-                                                        className="text-gray-900 dark:text-white"
+                                                        size={18}
+                                                        className="text-gray-900 dark:text-white sm:w-5 sm:h-5"
                                                     />
                                                 ) : (
                                                     <ChevronDown
-                                                        size={20}
-                                                        className="text-gray-900 dark:text-white"
+                                                        size={18}
+                                                        className="text-gray-900 dark:text-white sm:w-5 sm:h-5"
                                                     />
                                                 )}
                                             </button>
@@ -205,11 +205,11 @@ export default function OrdersPage() {
                                     </div>
 
                                     <div className="flex items-center justify-between">
-                                        <p className="text-gray-600 dark:text-gray-300">
+                                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                                             {order.items.length} item
                                             {order.items.length > 1 ? "s" : ""}
                                         </p>
-                                        <p className="text-xl font-bold text-pink-600 dark:text-pink-400">
+                                        <p className="text-lg sm:text-xl font-bold text-pink-600 dark:text-pink-400">
                                             ₦{" "}
                                             {numeral(
                                                 order.total_amount ||
@@ -221,18 +221,18 @@ export default function OrdersPage() {
 
                                 {/* Expanded Order Details */}
                                 {isExpanded && (
-                                    <div className="border-t border-gray-300 dark:border-slate-700 p-6">
+                                    <div className="border-t border-gray-300 dark:border-slate-700 p-4 sm:p-6">
                                         {/* Order Items */}
-                                        <div className="mb-6">
-                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-4">
+                                        <div className="mb-4 sm:mb-6">
+                                            <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
                                                 Order Items
                                             </h4>
-                                            <div className="space-y-4">
+                                            <div className="space-y-3 sm:space-y-4">
                                                 {order.items.map(
                                                     (item: OrderItem) => (
                                                         <div
                                                             key={item.id}
-                                                            className="flex gap-4"
+                                                            className="flex gap-3 sm:gap-4"
                                                         >
                                                             <Link
                                                                 href={`/product/${item.product.product_id}`}
@@ -252,14 +252,14 @@ export default function OrdersPage() {
                                                                     }
                                                                     width={80}
                                                                     height={106}
-                                                                    className="w-20 h-24 object-cover rounded"
+                                                                    className="w-16 h-20 sm:w-20 sm:h-24 object-cover rounded"
                                                                 />
                                                             </Link>
-                                                            <div className="flex-1">
+                                                            <div className="flex-1 min-w-0">
                                                                 <Link
                                                                     href={`/product/${item.product.product_id}`}
                                                                 >
-                                                                    <h5 className="font-semibold text-gray-900 dark:text-white hover:text-pink-600 dark:hover:text-pink-400">
+                                                                    <h5 className="text-sm sm:text-base font-semibold text-gray-900 dark:text-white hover:text-pink-600 dark:hover:text-pink-400 line-clamp-2">
                                                                         {
                                                                             item
                                                                                 .product
@@ -267,7 +267,7 @@ export default function OrdersPage() {
                                                                         }
                                                                     </h5>
                                                                 </Link>
-                                                                <p className="text-sm text-gray-600 dark:text-gray-300">
+                                                                <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 mt-1">
                                                                     Quantity:{" "}
                                                                     {
                                                                         item.quantity
@@ -276,7 +276,7 @@ export default function OrdersPage() {
                                                                         ?.name &&
                                                                         ` | Size: ${item.size.name}`}
                                                                 </p>
-                                                                <p className="text-sm font-semibold text-pink-600 dark:text-pink-400 mt-1">
+                                                                <p className="text-xs sm:text-sm font-semibold text-pink-600 dark:text-pink-400 mt-1">
                                                                     ₦{" "}
                                                                     {numeral(
                                                                         item.price *
@@ -294,10 +294,10 @@ export default function OrdersPage() {
 
                                         {/* Shipping Address */}
                                         <div>
-                                            <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                            <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-2">
                                                 Shipping Address
                                             </h4>
-                                            <div className="text-sm text-gray-600 dark:text-gray-300">
+                                            <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 space-y-1">
                                                 <p className="font-semibold text-gray-900 dark:text-white">
                                                     {order.shipping_address
                                                         ?.name ||
