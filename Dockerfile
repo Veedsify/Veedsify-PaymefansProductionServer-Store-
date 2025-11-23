@@ -41,6 +41,10 @@ COPY package.json bun.lockb* ./
 # Install all dependencies (including devDependencies for build)
 RUN bun install --frozen-lockfile
 
+# Copy Prisma schema and config files first
+COPY prisma ./prisma
+COPY prisma.config.ts ./prisma.config.ts 2>/dev/null || true
+
 # Copy application code
 COPY . .
 
@@ -48,12 +52,16 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Generate Prisma client if needed
+# Generate Prisma client BEFORE building
+# This must happen before the build as Next.js will import Prisma during build
 RUN if [ -f "prisma/schema.prisma" ]; then \
-      bunx prisma generate || true; \
+      echo "Generating Prisma client..." && \
+      bunx prisma generate; \
+    else \
+      echo "No Prisma schema found, skipping generation"; \
     fi
 
-# Build the application
+# Build the application (Prisma client is now available)
 RUN bun run build
 
 # Stage 3: Runner
@@ -82,7 +90,7 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./package.json
 
-# Copy Prisma files if they exist
+# Copy Prisma files (schema and generated client)
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/generated ./generated 2>/dev/null || true
 
