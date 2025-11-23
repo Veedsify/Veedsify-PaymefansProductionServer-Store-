@@ -23,6 +23,9 @@ RUN bun install --production --frozen-lockfile
 FROM oven/bun:1-alpine AS builder
 WORKDIR /app
 
+# Accept build argument for DATABASE_URL (optional, defaults to dummy if not provided)
+ARG DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
+
 # Install build dependencies including image processing libraries
 RUN apk add --no-cache \
     python3 \
@@ -50,13 +53,14 @@ COPY . .
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+ENV DATABASE_URL=${DATABASE_URL}
 
 # Generate Prisma client BEFORE building
 # This must happen before the build as Next.js will import Prisma during build
-# Use --schema flag to bypass config file and provide dummy DATABASE_URL for generation only
+# DATABASE_URL is provided as build argument or uses default dummy value
 RUN if [ -f "prisma/schema.prisma" ]; then \
       echo "Generating Prisma client..." && \
-      DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" bunx prisma generate --schema=./prisma/schema.prisma; \
+      bunx prisma generate --schema=./prisma/schema.prisma; \
     else \
       echo "No Prisma schema found, skipping generation"; \
     fi
