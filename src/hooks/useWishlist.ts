@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import axiosInstance from "@/utils/Axios";
+import axios from "axios";
 import ROUTE from "@/constants/routes";
 import { useWishlistStore } from "@/stores/wishlistStore";
 import type { StoreProduct } from "@/types";
@@ -20,7 +20,7 @@ export const useAddToWishlist = () => {
       productId: string;
       product: StoreProduct;
     }) => {
-      const response = await axiosInstance.post(ROUTE.WISHLIST_ADD, {
+      const response = await axios.post(ROUTE.WISHLIST_ADD, {
         productId,
         product,
       });
@@ -51,7 +51,7 @@ export const useRemoveFromWishlist = () => {
 
   return useMutation({
     mutationFn: async (productId: number) => {
-      const response = await axiosInstance.delete(
+      const response = await axios.delete(
         ROUTE.WISHLIST_REMOVE(String(productId))
       );
       return response.data;
@@ -79,7 +79,7 @@ export const useWishlist = () => {
   return useQuery({
     queryKey: ["wishlist"],
     queryFn: async () => {
-      const response = await axiosInstance.get(ROUTE.WISHLIST_GET);
+      const response = await axios.get(ROUTE.WISHLIST_GET);
       const wishlistData = response.data.data || [];
       // The server data will be synced with the store
       return response.data;
@@ -95,7 +95,7 @@ export const useCheckWishlist = (productId: string) => {
   return useQuery({
     queryKey: ["wishlist-check", productId],
     queryFn: async () => {
-      const response = await axiosInstance.get(ROUTE.WISHLIST_CHECK(productId));
+      const response = await axios.get(ROUTE.WISHLIST_CHECK(productId));
       return response.data;
     },
     enabled: !!productId,
@@ -110,7 +110,7 @@ export const useWishlistCount = () => {
   return useQuery({
     queryKey: ["wishlist-count"],
     queryFn: async () => {
-      const response = await axiosInstance.get(ROUTE.WISHLIST_COUNT);
+      const response = await axios.get(ROUTE.WISHLIST_COUNT);
       return response.data;
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
@@ -126,7 +126,7 @@ export const useClearWishlist = () => {
 
   return useMutation({
     mutationFn: async () => {
-      const response = await axiosInstance.delete(ROUTE.WISHLIST_CLEAR);
+      const response = await axios.delete(ROUTE.WISHLIST_CLEAR);
       return response.data;
     },
     onSuccess: () => {
