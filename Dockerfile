@@ -41,11 +41,10 @@ COPY package.json bun.lockb* ./
 # Install all dependencies (including devDependencies for build)
 RUN bun install --frozen-lockfile
 
-# Copy Prisma schema and config files first
+# Copy Prisma schema first (for better caching)
 COPY prisma ./prisma
-COPY prisma.config.ts ./prisma.config.ts 2>/dev/null || true
 
-# Copy application code
+# Copy application code (includes prisma.config.ts if it exists)
 COPY . .
 
 # Set environment variables for build
@@ -92,11 +91,9 @@ COPY --from=builder /app/package.json ./package.json
 
 # Copy Prisma files (schema and generated client)
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/generated ./generated 2>/dev/null || true
 
 # Copy next.config and other config files
 COPY --from=builder /app/next.config.ts ./next.config.ts
-COPY --from=builder /app/tsconfig.json ./tsconfig.json 2>/dev/null || true
 
 # Set correct permissions
 RUN chown -R bunjs:bunjs /app
