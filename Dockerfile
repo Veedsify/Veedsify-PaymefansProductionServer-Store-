@@ -53,9 +53,10 @@ ENV NODE_ENV=production
 
 # Generate Prisma client BEFORE building
 # This must happen before the build as Next.js will import Prisma during build
+# Use --schema flag to bypass config file and provide dummy DATABASE_URL for generation only
 RUN if [ -f "prisma/schema.prisma" ]; then \
       echo "Generating Prisma client..." && \
-      bunx prisma generate; \
+      DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy" bunx prisma generate --schema=./prisma/schema.prisma; \
     else \
       echo "No Prisma schema found, skipping generation"; \
     fi
