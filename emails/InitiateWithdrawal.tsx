@@ -16,7 +16,7 @@ export const InitiateWithdrawal = ({
   return (
     <EmailLayout
       preview="Withdrawal verification code"
-      heroImage="/PayMe Fans/Art 02.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCrduj9b8GSCzsvD6hInWLZqR9k5XPQ83rxE7H"
       heroText="Withdrawal Processing!"
       showButtons
       primaryButtonText="View Withdrawal Status"
@@ -56,7 +56,7 @@ export const InitiateWithdrawal = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 
@@ -80,7 +80,7 @@ const codeText = {
   fontFamily: "'Courier New', monospace",
   fontSize: "32px",
   fontWeight: "bold",
-  color: "#a94296",
+  color: "#cc0df8",
   backgroundColor: "#f8f8f8",
   padding: "15px 25px",
   border: "2px dashed #ddd",

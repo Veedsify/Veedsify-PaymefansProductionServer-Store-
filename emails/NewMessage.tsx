@@ -14,7 +14,7 @@ export const NewMessage = ({
   return (
     <EmailLayout
       preview="You've received a new message"
-      heroImage="/PayMe Fans/Art 04.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGC2Qub9uFdk9hFx1cfK7lmgrp5qybV2T6wZOMP"
       heroText="You've Received a New Message!"
       showButtons
       primaryButtonText="View Message"
@@ -42,7 +42,7 @@ export const NewMessage = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

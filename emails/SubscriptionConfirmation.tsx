@@ -16,7 +16,7 @@ export const SubscriptionConfirmation = ({
   return (
     <EmailLayout
       preview="Welcome to exclusive content!"
-      heroImage="/PayMe Fans/Art 07 Single.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCBLrtdUB0WNlSCqngv8AzrEXYUpJMd4fBR3bP"
       heroText={`Welcome to ${username}'s Exclusive Content!`}
       showButtons
       primaryButtonText="Explore Exclusive Content"
@@ -59,7 +59,7 @@ export const SubscriptionConfirmation = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

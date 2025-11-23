@@ -54,21 +54,24 @@ export const EmailLayout = ({
         <Container style={container}>
           {/* Header */}
           <Section style={header}>
-            <Row>
+            <Row style={{ alignItems: "center" }} align="center">
               <Column style={logoColumn}>
-                <svg
-                  width="40"
-                  height="40"
-                  viewBox="0 0 24 24"
-                  style={logo}
-                  fill="currentColor"
-                >
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                </svg>
+                <Img
+                  src={
+                    "https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCZOttJfzXwh4LIj9c0O5Tq3NHg7DzvSo2RsEQ"
+                  }
+                  alt="PayMeFans Logo"
+                  width="600"
+                  height="200"
+                  style={{
+                    width: "140px",
+                    height: "30px",
+                  }}
+                />
               </Column>
               <Column style={navButtonColumn}>
                 <Link href="https://paymefans.com/profile" style={navButton}>
-                  Navigate to Profile
+                  Go to Profile
                 </Link>
               </Column>
             </Row>
@@ -167,7 +170,7 @@ const logoColumn = {
 };
 
 const logo = {
-  color: "#a94296",
+  color: "#cc0df8",
   height: "40px",
 };
 
@@ -180,7 +183,7 @@ const navButtonColumn = {
 const navButton = {
   display: "inline-block",
   padding: "8px 15px",
-  backgroundColor: "#a94296",
+  backgroundColor: "#cc0df8",
   color: "#fff",
   textDecoration: "none",
   fontSize: "14px",
@@ -188,23 +191,23 @@ const navButton = {
 };
 
 const heroImageSection = {
-  width: "100%",
+  width: "200px",
   marginBottom: "0",
 };
 
 const heroImageStyle = {
-  width: "100%",
+  width: "200px",
   height: "200px",
   objectFit: "cover" as const,
   display: "block",
+  margin: "0 auto",
 };
 
 const heroTextSection = {
   width: "100%",
   textAlign: "center" as const,
-  backgroundColor: "#333",
+  backgroundColor: "#000",
   padding: "15px 20px",
-  marginTop: "-5px",
 };
 
 const heroTextStyle = {
@@ -227,7 +230,7 @@ const buttonSection = {
 const primaryButton = {
   display: "inline-block",
   padding: "12px 25px",
-  backgroundColor: "#a94296",
+  backgroundColor: "#cc0df8",
   color: "#fff",
   textDecoration: "none",
   borderRadius: "25px",

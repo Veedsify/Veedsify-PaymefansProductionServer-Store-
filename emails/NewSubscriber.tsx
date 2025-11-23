@@ -18,7 +18,7 @@ export const NewSubscriber = ({
   return (
     <EmailLayout
       preview="You have a new subscriber!"
-      heroImage="/PayMe Fans/Art 10.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGC68KVbenZqxRPNXj4on9tg3VzUBQD182CWfiS"
       heroText="New Subscriber Alert!"
       showButtons
       primaryButtonText="View Subscriber List"
@@ -59,7 +59,7 @@ export const NewSubscriber = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

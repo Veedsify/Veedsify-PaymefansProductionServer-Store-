@@ -10,7 +10,7 @@ export const CommunityWelcome = ({ name = "there" }: CommunityWelcomeProps) => {
   return (
     <EmailLayout
       preview="Welcome to PayMeFans as a Model/Creator!"
-      heroImage="/PayMe Fans/Art 07.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCOIVO49xa2UeHVCqJO7iKXZlwSnW9Q3ELdT6f"
       heroText="You're in"
       showButtons
       primaryButtonText="Get Started Now"
@@ -110,7 +110,7 @@ export const CommunityWelcome = ({ name = "there" }: CommunityWelcomeProps) => {
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 
@@ -160,7 +160,7 @@ const resourceText = {
 };
 
 const linkStyle = {
-  color: "#007bff",
+  color: "#cc0df8",
   textDecoration: "underline",
 };
 

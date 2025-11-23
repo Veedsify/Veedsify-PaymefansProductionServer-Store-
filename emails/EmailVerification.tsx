@@ -14,7 +14,7 @@ export const EmailVerification = ({
   return (
     <EmailLayout
       preview="Please verify your email address"
-      heroImage="/PayMe Fans/verification.webp"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCJFEVM5jjaBGD0ZIxKJL1tCkoF37AcTMXwV8i"
       heroText="Confirm Your Email Address"
       showButtons
       primaryButtonText="Verify My Email"
@@ -44,7 +44,7 @@ export const EmailVerification = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

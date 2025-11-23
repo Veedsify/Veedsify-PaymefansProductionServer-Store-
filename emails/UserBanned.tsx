@@ -10,7 +10,7 @@ export const UserBanned = ({ name = "there" }: UserBannedProps) => {
   return (
     <EmailLayout
       preview="Important account notice"
-      heroImage="https://via.placeholder.com/600x200"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGC4N8u1G7gJC6t5OkBIHRLqnrX4E7mGgyQVszc"
       heroText="Important Notice"
       showButtons
       primaryButtonText="Contact Support"
@@ -60,7 +60,7 @@ export const UserBanned = ({ name = "there" }: UserBannedProps) => {
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

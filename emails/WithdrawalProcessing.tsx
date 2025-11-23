@@ -12,7 +12,7 @@ export const WithdrawalProcessing = ({
   return (
     <EmailLayout
       preview="Your withdrawal is being processed"
-      heroImage="/PayMe Fans/Art 02.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCBbAwjh0WNlSCqngv8AzrEXYUpJMd4fBR3bPs"
       heroText="Withdrawal Processing!"
       showButtons
       primaryButtonText="View Withdrawal Status"
@@ -53,7 +53,7 @@ export const WithdrawalProcessing = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

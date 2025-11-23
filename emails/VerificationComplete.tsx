@@ -12,7 +12,7 @@ export const VerificationComplete = ({
   return (
     <EmailLayout
       preview="Your verification is complete!"
-      heroImage="/PayMe Fans/verification.webp"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCuZxlNm68mHovFOWUKatPuCNTQqx9lyk03EL2"
       heroText="Verification Complete!"
       showButtons
       primaryButtonText="Go to Dashboard"
@@ -51,7 +51,7 @@ export const VerificationComplete = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

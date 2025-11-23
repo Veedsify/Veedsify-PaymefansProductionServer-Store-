@@ -20,7 +20,7 @@ export const ConfirmWithdrawal = ({
   return (
     <EmailLayout
       preview="Withdrawal request confirmed"
-      heroImage="/PayMe Fans/Art 02.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCbYHF08kB8NpSM64osEwqJglatDvYIXzU5hc1"
       heroText="Withdrawal Processing!"
       showButtons
       primaryButtonText="View Withdrawal Status"
@@ -63,7 +63,7 @@ export const ConfirmWithdrawal = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

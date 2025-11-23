@@ -162,7 +162,7 @@ export const OrderConfirmation = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 
@@ -254,7 +254,7 @@ const itemQuantity = {
 const itemPrice = {
   fontSize: "16px",
   fontWeight: "bold",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   marginBottom: "0",
 };
 
@@ -274,7 +274,7 @@ const addressText = {
 };
 
 const totalSection = {
-  backgroundColor: "#9d3d8c",
+  backgroundColor: "#cc0df8",
   borderRadius: "8px",
   padding: "20px",
   marginBottom: "20px",
@@ -306,7 +306,7 @@ const totalValue = {
 };
 
 const link = {
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textDecoration: "underline",
 };
 

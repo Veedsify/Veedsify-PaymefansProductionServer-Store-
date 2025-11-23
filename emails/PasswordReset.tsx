@@ -16,7 +16,7 @@ export const PasswordReset = ({
   return (
     <EmailLayout
       preview="Password reset request received"
-      heroImage="/PayMe Fans/Art 09.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCY2xrZpL3G8jcrI0UOutZPEvmeQyoTbliMpdx"
       heroText="Password Reset Request Received"
     >
       <Heading style={heading}>Hi {name},</Heading>
@@ -55,7 +55,7 @@ export const PasswordReset = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 
@@ -86,7 +86,7 @@ const codeText = {
   fontFamily: "'Courier New', monospace",
   fontSize: "24px",
   fontWeight: "bold",
-  color: "#a94296",
+  color: "#cc0df8",
   backgroundColor: "#f8f8f8",
   padding: "15px 25px",
   border: "2px dashed #ddd",
@@ -108,7 +108,7 @@ const strong = {
 };
 
 const linkStyle = {
-  color: "#007bff",
+  color: "#cc0df8",
   textDecoration: "underline",
 };
 

@@ -16,7 +16,7 @@ export const PointPurchase = ({
   return (
     <EmailLayout
       preview="Points purchase successful"
-      heroImage="/PayMe Fans/Art 08.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCHz7Ikh22L5PKOFbyY7TXZwa4lJeS0ohxrfcB"
       heroText="Purchase Successful!"
       showButtons
       primaryButtonText="View My Points"
@@ -51,7 +51,7 @@ export const PointPurchase = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

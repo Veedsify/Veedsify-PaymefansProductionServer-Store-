@@ -14,7 +14,7 @@ export const PasswordChanged = ({
   return (
     <EmailLayout
       preview="Your password has been changed"
-      heroImage="/PayMe Fans/Art 01.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCOd5r0rxa2UeHVCqJO7iKXZlwSnW9Q3ELdT6f"
       heroText="Your Password Has Been Changed!"
       showButtons
       primaryButtonText="Log In Now"
@@ -51,7 +51,7 @@ export const PasswordChanged = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 
@@ -67,7 +67,7 @@ const strong = {
 };
 
 const linkStyle = {
-  color: "#007bff",
+  color: "#cc0df8",
   textDecoration: "underline",
 };
 

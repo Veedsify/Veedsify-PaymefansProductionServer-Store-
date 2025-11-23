@@ -16,7 +16,7 @@ export const WithdrawalSuccessful = ({
   return (
     <EmailLayout
       preview="Your withdrawal has been processed successfully"
-      heroImage="/PayMe Fans/Art 10.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCJc36wFMjjaBGD0ZIxKJL1tCkoF37AcTMXwV8"
       heroText="Withdrawal Successful!"
       showButtons
       primaryButtonText="View Transaction History"
@@ -58,7 +58,7 @@ export const WithdrawalSuccessful = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

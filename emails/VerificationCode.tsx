@@ -14,7 +14,7 @@ export const VerificationCode = ({
   return (
     <EmailLayout
       preview="Your verification code"
-      heroImage="/PayMe Fans/verification.webp"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCWO68cSEI7bDUMgZBcSxVtwrufO5j1mPqCX9s"
       heroText="Your Verification Code"
     >
       <Heading style={heading}>Hi {name},</Heading>
@@ -49,7 +49,7 @@ export const VerificationCode = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 
@@ -80,7 +80,7 @@ const codeText = {
   fontFamily: "'Courier New', monospace",
   fontSize: "24px",
   fontWeight: "bold",
-  color: "#a94296",
+  color: "#cc0df8",
   backgroundColor: "#f8f8f8",
   padding: "15px 25px",
   border: "2px dashed #ddd",
@@ -98,7 +98,7 @@ const codeExpiry = {
 };
 
 const linkStyle = {
-  color: "#007bff",
+  color: "#cc0df8",
   textDecoration: "underline",
 };
 

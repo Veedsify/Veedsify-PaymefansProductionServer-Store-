@@ -10,7 +10,7 @@ export const Welcome = ({ name = "there" }: WelcomeProps) => {
   return (
     <EmailLayout
       preview="Welcome to PayMeFans! We're excited to have you join our community."
-      heroImage="/PayMe Fans/Art 03.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCtXbq6RTHLoTtFjGmMdfy7BUnCNkXl4bK6Wh8"
       heroText="Welcome to PayMeFans!"
       showButtons
       primaryButtonText="Get Started Now"
@@ -46,7 +46,7 @@ export default Welcome;
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

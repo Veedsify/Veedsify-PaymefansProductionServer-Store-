@@ -12,7 +12,7 @@ export const TwoFactorAuthentication = ({
   return (
     <EmailLayout
       preview="Two-Factor Authentication has been activated"
-      heroImage="/PayMe Fans/Art 07 Single.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCARTLCBu4JcQdIDEop9OZrHm4z6wVW0vRXB2L"
       heroText="Your Account is Now More Secure!"
       showButtons
       primaryButtonText="Manage 2FA Settings"
@@ -64,7 +64,7 @@ export const TwoFactorAuthentication = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

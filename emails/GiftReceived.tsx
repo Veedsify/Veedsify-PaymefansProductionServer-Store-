@@ -16,7 +16,7 @@ export const GiftReceived = ({
   return (
     <EmailLayout
       preview="You've received a gift!"
-      heroImage="/PayMe Fans/Art 05.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCvR80eTQ5xFzcpqZVBsgLokUlAYJ4mWCydrhO"
       heroText="You've Received a Gift!"
       showButtons
       primaryButtonText="View Your Gifts"
@@ -50,7 +50,7 @@ export const GiftReceived = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 

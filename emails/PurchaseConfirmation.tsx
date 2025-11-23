@@ -20,7 +20,7 @@ export const PurchaseConfirmation = ({
   return (
     <EmailLayout
       preview="Your purchase was successful"
-      heroImage="/PayMe Fans/Art 10.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCalTzHqMhVSewBXju2ofD90QUdgnp5CZNIJlv"
       heroText="Your Purchase Was Successful!"
       showButtons
       primaryButtonText="Track Your Order"
@@ -60,7 +60,7 @@ export const PurchaseConfirmation = ({
 const heading = {
   fontSize: "24px",
   marginBottom: "15px",
-  color: "#9d3d8c",
+  color: "#cc0df8",
   textAlign: "center" as const,
 };
 
