@@ -44,7 +44,7 @@ export const sendEmailQueue = inngest.createFunction(
           html: storeEmailTemplate,
           from: `Paymefans Store<info@paymefans.com>`,
         },
-        (err, info) => {
+        (err: Error | null, _: any) => {
           if (err) {
             reject({ message: "Email Failed To Send" });
           }
