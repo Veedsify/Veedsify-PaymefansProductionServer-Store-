@@ -14,10 +14,10 @@ export default function BottomNav() {
 
   const navItems = [
     {
-      href: "/",
+      href: "/store",
       icon: Home,
       label: "Store",
-      active: pathname === "/",
+      active: pathname === "/store",
     },
     {
       href: "/wishlist",
