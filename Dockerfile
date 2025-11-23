@@ -23,8 +23,13 @@ RUN bun install --production --frozen-lockfile
 FROM oven/bun:1-alpine AS builder
 WORKDIR /app
 
-# Accept build argument for DATABASE_URL (optional, defaults to dummy if not provided)
-ARG DATABASE_URL=postgresql://dummy:dummy@localhost:5432/dummy
+# Accept build arguments (must be provided at build time)
+ARG DATABASE_URL
+ARG MAIL_HOST
+ARG MAIL_PORT
+ARG MAIL_USER
+ARG MAIL_PASS
+ARG MAIL_USERNAME
 
 # Install build dependencies including image processing libraries
 RUN apk add --no-cache \
@@ -54,6 +59,11 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 ENV DATABASE_URL=${DATABASE_URL}
+ENV MAIL_HOST=${MAIL_HOST}
+ENV MAIL_PORT=${MAIL_PORT}
+ENV MAIL_USER=${MAIL_USER}
+ENV MAIL_PASS=${MAIL_PASS}
+ENV MAIL_USERNAME=${MAIL_USERNAME}
 
 # Generate Prisma client BEFORE building
 # This must happen before the build as Next.js will import Prisma during build
@@ -72,8 +82,22 @@ RUN bun run build
 FROM oven/bun:1-alpine AS runner
 WORKDIR /app
 
+# Accept build arguments for runtime (can be overridden at runtime via -e flags)
+ARG DATABASE_URL
+ARG MAIL_HOST
+ARG MAIL_PORT
+ARG MAIL_USER
+ARG MAIL_PASS
+ARG MAIL_USERNAME
+
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV DATABASE_URL=${DATABASE_URL}
+ENV MAIL_HOST=${MAIL_HOST}
+ENV MAIL_PORT=${MAIL_PORT}
+ENV MAIL_USER=${MAIL_USER}
+ENV MAIL_PASS=${MAIL_PASS}
+ENV MAIL_USERNAME=${MAIL_USERNAME}
 
 # Install runtime dependencies for Next.js and native modules
 RUN apk add --no-cache \
