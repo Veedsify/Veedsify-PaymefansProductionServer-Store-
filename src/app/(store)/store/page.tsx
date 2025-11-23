@@ -66,14 +66,14 @@ export default function Home() {
   return (
     <div className="min-h-dvh bg-white dark:bg-gray-950">
       <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <header className="mb-8">
-          <h2 className="text-lg font-semibold dark:text-white">
+        <header className="mb-6 sm:mb-8">
+          <h2 className="text-sm sm:text-base md:text-lg font-semibold dark:text-white">
             HI {session?.user?.name}
           </h2>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white sm:text-3xl mb-2">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">
             Shop by Category
           </h1>
-          <p className="max-w-2xl text-slate-600 dark:text-slate-200">
+          <p className="max-w-2xl text-sm sm:text-base text-slate-600 dark:text-slate-200">
             Discover exclusive products and merchandise from your favorite
             creators. Quality items across all categories.
           </p>

@@ -26,20 +26,20 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <section className="py-16 bg-white dark:bg-gray-950 min-h-screen">
+      <section className="py-8 sm:py-16 bg-white dark:bg-gray-950 min-h-screen">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8">
             Shopping Cart
           </h1>
-          <div className="flex flex-col items-center justify-center py-16">
+          <div className="flex flex-col items-center justify-center py-12 sm:py-16">
             <ShoppingBag
-              size={64}
-              className="text-gray-400 dark:text-gray-600 mb-4"
+              size={48}
+              className="text-gray-400 dark:text-gray-600 mb-4 sm:w-16 sm:h-16"
             />
-            <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-2">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900 dark:text-white mb-2">
               Your cart is empty
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 mb-6 text-center px-4">
               Start shopping to add items to your cart
             </p>
             <Link

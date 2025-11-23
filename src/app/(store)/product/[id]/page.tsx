@@ -228,7 +228,7 @@ export default function ProductDetail() {
             <div className="space-y-6">
               {/* Title and Wishlist */}
               <div className="flex items-start justify-between gap-4">
-                <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white">
                   {product.name}
                 </h1>
                 <button
@@ -248,12 +248,12 @@ export default function ProductDetail() {
               </div>
 
               {/* Price */}
-              <div className="flex items-baseline gap-3">
-                <span className="text-4xl font-bold text-pink-600">
+              <div className="flex items-baseline gap-2 sm:gap-3">
+                <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-pink-600">
                   ₦{numeral(product.price).format("0,0.00")}
                 </span>
                 {product.price < product.price * 1.2 && (
-                  <span className="text-xl text-slate-500 dark:text-slate-400 line-through">
+                  <span className="text-base sm:text-lg md:text-xl text-slate-500 dark:text-slate-400 line-through">
                     ₦{numeral(product.price * 1.2).format("0,0.00")}
                   </span>
                 )}

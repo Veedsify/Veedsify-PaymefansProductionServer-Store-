@@ -91,20 +91,20 @@ export default function ProductCard({ product }: ProductCardProps) {
                 </div>
             </Link>
 
-            <div className="p-4">
+            <div className="p-3 sm:p-4">
                 <Link href={`/product/${product.product_id}`}>
                     <p className="mb-2">
-                        <span className="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">
+                        <span className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">
                             {product.name}
                         </span>
                     </p>
                 </Link>
 
                 <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-xl font-bold text-pink-600 dark:text-pink-400">
+                    <h3 className="text-lg sm:text-xl font-bold text-pink-600 dark:text-pink-400">
                         ₦ {numeral(product.price).format("0,0.00")}
                     </h3>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
                         {product.category.name}
                     </p>
                 </div>
@@ -113,9 +113,9 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <button
                     onClick={handleAddToCart}
                     disabled={product.instock === 0}
-                    className="flex items-center justify-center w-full gap-2 px-4 py-2 text-sm font-semibold text-white transition-colors rounded-lg bg-pink-600 hover:bg-pink-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex items-center justify-center w-full gap-2 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-white transition-colors rounded-lg bg-pink-600 hover:bg-pink-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                    <ShoppingCart className="w-4 h-4" />
+                    <ShoppingCart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     {product.sizes.length > 0
                         ? "Select Options"
                         : "Add to Cart"}

@@ -92,6 +92,11 @@ html.dark ::selection {
   html {
     font-size: 92%;
   }
+  
+  /* Safe area insets for notched phones */
+  .safe-area-inset-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
 }
 
 html,
