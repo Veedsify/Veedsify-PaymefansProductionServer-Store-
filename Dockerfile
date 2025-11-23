@@ -1,38 +1,105 @@
-# Use a specific version of Bun (e.g., bun:latest)
-FROM oven/bun:1
-
-# Set the working directory
+# Stage 1: Dependencies
+FROM oven/bun:1-alpine AS deps
 WORKDIR /app
 
-# Install system dependencies for native module compilation
-RUN apt-get update && apt-get install -y \
+# Install dependencies needed for native modules and Next.js runtime
+RUN apk add --no-cache \
     python3 \
-    python3-pip \
-    build-essential \
     make \
     g++ \
-    && rm -rf /var/lib/apt/lists/*
+    libc6-compat \
+    ca-certificates \
+    openssl \
+    curl \
+    && rm -rf /var/cache/apk/*
 
-# Set Python environment variable for node-gyp
-ENV PYTHON=/usr/bin/python3
-
-# Copy package.json and bun.lockb separately to leverage Docker cache
+# Copy package files
 COPY package.json bun.lockb* ./
 
-# Install dependencies with Bun (equivalent to npm install)
-RUN bun install
+# Install production dependencies
+RUN bun install --production --frozen-lockfile
 
-# Copy the rest of the application code
+# Stage 2: Builder
+FROM oven/bun:1-alpine AS builder
+WORKDIR /app
+
+# Install build dependencies including image processing libraries
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    libc6-compat \
+    vips-dev \
+    ca-certificates \
+    openssl \
+    curl \
+    && rm -rf /var/cache/apk/*
+
+# Copy package files
+COPY package.json bun.lockb* ./
+
+# Install all dependencies (including devDependencies for build)
+RUN bun install --frozen-lockfile
+
+# Copy application code
 COPY . .
 
-# Build the application (if needed, Bun has a different build command)
-RUN bun run build
-
-# Expose the application port
-EXPOSE 3000
-
-# Set default environment variable
+# Set environment variables for build
+ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
-# Start the application with Bun (equivalent to npm start)
+# Generate Prisma client if needed
+RUN if [ -f "prisma/schema.prisma" ]; then \
+      bunx prisma generate || true; \
+    fi
+
+# Build the application
+RUN bun run build
+
+# Stage 3: Runner
+FROM oven/bun:1-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Install runtime dependencies for Next.js and native modules
+RUN apk add --no-cache \
+    libc6-compat \
+    ca-certificates \
+    openssl \
+    curl \
+    vips \
+    && rm -rf /var/cache/apk/*
+
+# Create a non-root user
+RUN addgroup --system --gid 1001 bunjs
+RUN adduser --system --uid 1001 bunjs
+
+# Copy necessary files from builder
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+
+# Copy Prisma files if they exist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/generated ./generated 2>/dev/null || true
+
+# Copy next.config and other config files
+COPY --from=builder /app/next.config.ts ./next.config.ts
+COPY --from=builder /app/tsconfig.json ./tsconfig.json 2>/dev/null || true
+
+# Set correct permissions
+RUN chown -R bunjs:bunjs /app
+
+USER bunjs
+
+# Expose port
+EXPOSE 3000
+
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+# Start the application
 CMD ["bun", "start"]
