@@ -1,11 +1,4 @@
-import {
-  Heading,
-  Text,
-  Section,
-  Row,
-  Column,
-} from "@react-email/components";
-import * as React from "react";
+import { Heading, Text, Section, Row, Column } from "@react-email/components";
 import { EmailLayout } from "./components/EmailLayout";
 
 interface OrderItem {
@@ -54,7 +47,7 @@ export const OrderConfirmation = ({
   return (
     <EmailLayout
       preview="Your order has been confirmed!"
-      heroImage="/PayMe Fans/Art 10.png"
+      heroImage="https://ys837zjc1f.ufs.sh/f/yfhOarqJNTGCvR80eTQ5xFzcpqZVBsgLokUlAYJ4mWCydrhO"
       heroText="Order Confirmed! 🎉"
       showButtons
       primaryButtonText="Track Your Order"
@@ -64,8 +57,8 @@ export const OrderConfirmation = ({
     >
       <Heading style={heading}>Hi {name}!</Heading>
       <Text style={paragraph}>
-        Thank you for your order! We're excited to let you know that your
-        order has been confirmed and is being prepared for shipment.
+        Thank you for your order! We're excited to let you know that your order
+        has been confirmed and is being prepared for shipment.
       </Text>
 
       <Section style={orderInfoSection}>
