@@ -18,6 +18,9 @@ export default function CartPage() {
     (sum, item) => sum + item.product.price * item.quantity,
     0
   );
+  const taxRate = 0.075;
+  const tax = subtotal * taxRate;
+  const total = subtotal + tax;
 
   const handleQuantityChange = (itemId: number, newQuantity: number) => {
     if (newQuantity < 1) return;
@@ -177,6 +180,14 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-300">
+                    Tax (7.5%)
+                  </span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    ₦ {numeral(tax).format("0,0.00")}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-300">
                     Shipping
                   </span>
                   <span className="font-semibold text-gray-900 dark:text-white">
@@ -189,7 +200,7 @@ export default function CartPage() {
                       Total
                     </span>
                     <span className="text-lg font-bold text-pink-600 dark:text-pink-400">
-                      ₦ {numeral(subtotal).format("0,0.00")}
+                      ₦ {numeral(total).format("0,0.00")}
                     </span>
                   </div>
                 </div>

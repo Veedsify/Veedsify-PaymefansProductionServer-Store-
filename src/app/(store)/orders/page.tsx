@@ -204,18 +204,33 @@ export default function OrdersPage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center justify-between">
-                                        <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
-                                            {order.items.length} item
-                                            {order.items.length > 1 ? "s" : ""}
-                                        </p>
-                                        <p className="text-lg sm:text-xl font-bold text-pink-600 dark:text-pink-400">
-                                            ₦{" "}
-                                            {numeral(
-                                                order.total_amount ||
-                                                    order.total,
-                                            ).format("0,0.00")}
-                                        </p>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300">
+                                                {order.items.length} item
+                                                {order.items.length > 1 ? "s" : ""}
+                                            </p>
+                                            <p className="text-lg sm:text-xl font-bold text-pink-600 dark:text-pink-400">
+                                                ₦{" "}
+                                                {numeral(
+                                                    order.total_amount ||
+                                                        order.total,
+                                                ).format("0,0.00")}
+                                            </p>
+                                        </div>
+                                        {(() => {
+                                            const orderSubtotal = order.items.reduce(
+                                                (sum: number, item: OrderItem) => sum + (item.price * item.quantity),
+                                                0
+                                            );
+                                            const orderTax = orderSubtotal * 0.075;
+                                            return (
+                                                <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                                                    <span>Subtotal: ₦{numeral(orderSubtotal).format("0,0.00")}</span>
+                                                    <span>Tax: ₦{numeral(orderTax).format("0,0.00")}</span>
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
 
@@ -290,6 +305,49 @@ export default function OrdersPage() {
                                                     ),
                                                 )}
                                             </div>
+                                        </div>
+
+                                        {/* Order Summary */}
+                                        <div className="mb-4 sm:mb-6 border-t border-gray-300 dark:border-slate-700 pt-4">
+                                            <h4 className="text-xs sm:text-sm font-semibold text-gray-900 dark:text-white mb-3">
+                                                Order Summary
+                                            </h4>
+                                            {(() => {
+                                                const orderSubtotal = order.items.reduce(
+                                                    (sum: number, item: OrderItem) => sum + (item.price * item.quantity),
+                                                    0
+                                                );
+                                                const orderTax = orderSubtotal * 0.075;
+                                                const orderTotal = orderSubtotal + orderTax;
+                                                return (
+                                                    <div className="space-y-2 text-xs sm:text-sm">
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600 dark:text-gray-300">
+                                                                Subtotal
+                                                            </span>
+                                                            <span className="font-semibold text-gray-900 dark:text-white">
+                                                                ₦ {numeral(orderSubtotal).format("0,0.00")}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600 dark:text-gray-300">
+                                                                Tax (7.5%)
+                                                            </span>
+                                                            <span className="font-semibold text-gray-900 dark:text-white">
+                                                                ₦ {numeral(orderTax).format("0,0.00")}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex justify-between border-t border-gray-300 dark:border-slate-700 pt-2">
+                                                            <span className="font-bold text-gray-900 dark:text-white">
+                                                                Total
+                                                            </span>
+                                                            <span className="font-bold text-pink-600 dark:text-pink-400">
+                                                                ₦ {numeral(orderTotal).format("0,0.00")}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })()}
                                         </div>
 
                                         {/* Shipping Address */}

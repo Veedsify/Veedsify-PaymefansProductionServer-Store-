@@ -82,6 +82,8 @@ class OrderService {
         isValid: boolean;
         message?: string;
         total: number;
+        subtotal: number;
+        tax: number;
         validatedItems: any[];
     }> {
         try {
@@ -90,6 +92,8 @@ class OrderService {
                     isValid: false,
                     message: "Cart is empty",
                     total: 0,
+                    subtotal: 0,
+                    tax: 0,
                     validatedItems: [],
                 };
             }
@@ -115,6 +119,8 @@ class OrderService {
                         isValid: false,
                         message: `Product ${item.product_id} not found`,
                         total: 0,
+                        subtotal: 0,
+                        tax: 0,
                         validatedItems: [],
                     };
                 }
@@ -125,6 +131,8 @@ class OrderService {
                         isValid: false,
                         message: `Insufficient stock for ${product.name}. Available: ${product.instock}, Requested: ${item.quantity}`,
                         total: 0,
+                        subtotal: 0,
+                        tax: 0,
                         validatedItems: [],
                     };
                 }
@@ -139,6 +147,8 @@ class OrderService {
                             isValid: false,
                             message: `Invalid size for ${product.name}`,
                             total: 0,
+                            subtotal: 0,
+                            tax: 0,
                             validatedItems: [],
                         };
                     }
@@ -156,9 +166,16 @@ class OrderService {
                 });
             }
 
+            // Calculate 7.5% tax on subtotal
+            const taxRate = 0.075;
+            const tax = total * taxRate;
+            const totalWithTax = total + tax;
+
             return {
                 isValid: true,
-                total,
+                total: totalWithTax,
+                subtotal: total,
+                tax,
                 validatedItems,
             };
         } catch (error) {
@@ -167,6 +184,8 @@ class OrderService {
                 isValid: false,
                 message: "Failed to validate items",
                 total: 0,
+                subtotal: 0,
+                tax: 0,
                 validatedItems: [],
             };
         }
@@ -371,6 +390,8 @@ class OrderService {
                     payment_url: paymentData?.authorization_url,
                     access_code: paymentData?.access_code,
                     total_amount: validation.total,
+                    subtotal: validation.subtotal,
+                    tax: validation.tax,
                 },
             };
         } catch (error: any) {

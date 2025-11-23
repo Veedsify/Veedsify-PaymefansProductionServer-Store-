@@ -22,7 +22,10 @@ type ShippingAddress = {
 export default function CheckoutPage() {
   const items = useCartStore((state) => state.items);
   const { data: session } = useSession();
-  const cartTotal = useCartStore((state) => state.total());
+  const subtotal = useCartStore((state) => state.total());
+  const taxRate = 0.075;
+  const tax = subtotal * taxRate;
+  const cartTotal = subtotal + tax;
 
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
     name: session?.user?.name ?? "",
@@ -413,7 +416,15 @@ export default function CheckoutPage() {
                     Subtotal
                   </span>
                   <span className="font-semibold text-gray-900 dark:text-white">
-                    ₦ {numeral(cartTotal).format("0,0.00")}
+                    ₦ {numeral(subtotal).format("0,0.00")}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600 dark:text-gray-300">
+                    Tax (7.5%)
+                  </span>
+                  <span className="font-semibold text-gray-900 dark:text-white">
+                    ₦ {numeral(tax).format("0,0.00")}
                   </span>
                 </div>
                 <div className="flex justify-between">
