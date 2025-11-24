@@ -32,19 +32,19 @@ export default function Footer() {
               Privacy
             </Link>
             <a
-              href="#"
+              href="mailto:support@paymefans.com"
               className="text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
             >
               Support
             </a>
             <a
-              href="#"
+              href="mailto:support@paymefans.com"
               className="text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
             >
               Contact
             </a>
             <Link
-              href="https://paymefans.com"
+              href="https://paymefans.com/profile"
               className="text-sm font-medium text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 transition-colors"
             >
               Back to Profile
