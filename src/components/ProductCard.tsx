@@ -100,7 +100,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     </p>
                 </Link>
 
-                <div className="flex items-center justify-between mb-3">
+                <div className="flex flex-col justify-between mb-3">
                     <h3 className="text-lg sm:text-xl font-bold text-pink-600 dark:text-pink-400">
                         ₦ {numeral(product.price).format("0,0.00")}
                     </h3>

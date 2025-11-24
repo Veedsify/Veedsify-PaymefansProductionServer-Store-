@@ -19,18 +19,18 @@ export default function Footer() {
 
           {/* Links */}
           <div className="flex items-center gap-6">
-            <a
-              href="#"
+            <Link
+              href="/pages/store-terms-and-conditions"
               className="text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
             >
               Terms
-            </a>
-            <a
-              href="#"
+            </Link>
+            <Link
+              href="/pages/store-privacy-policy"
               className="text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
             >
               Privacy
-            </a>
+            </Link>
             <a
               href="#"
               className="text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"

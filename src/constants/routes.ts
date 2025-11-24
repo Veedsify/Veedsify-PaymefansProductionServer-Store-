@@ -109,6 +109,13 @@ const ROUTE = {
    */
   GET_PRODUCTS_BY_CATEGORY: (category_id: string, page: number) =>
     `/api/store/categories/${category_id}/products?page=${page}`,
+
+  /**
+   * Endpoint for fetching outer pages by slug
+   * @param {string} slug - The page slug
+   * @returns {string} The URL to fetch the page
+   */
+  GET_PAGE: (slug: string) => `/api/pages/${slug}`,
 };
 
 export default ROUTE;

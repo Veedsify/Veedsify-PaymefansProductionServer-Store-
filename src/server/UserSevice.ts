@@ -61,9 +61,12 @@ class UserService {
                     message: "Invalid email",
                 };
             const user = await prisma.user.findFirst({
-                where: {
-                    email,
+              where: {
+                email: {
+                  contains: email,
+                  mode: "insensitive",
                 },
+              },
             });
             return {
                 error: !user,
