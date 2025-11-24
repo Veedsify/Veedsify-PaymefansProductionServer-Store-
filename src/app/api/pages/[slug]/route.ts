@@ -15,19 +15,19 @@ export async function GET(
             );
         }
 
-        const page = await prisma.outerPages.findUnique({
-            where: {
-                slug: slug,
-            },
-            select: {
-                id: true,
-                page_id: true,
-                slug: true,
-                title: true,
-                content: true,
-                created_at: true,
-                updated_at: true,
-            },
+        const page = await prisma.outerPages.findFirst({
+          where: {
+            slug: slug,
+          },
+          select: {
+            id: true,
+            page_id: true,
+            slug: true,
+            title: true,
+            content: true,
+            created_at: true,
+            updated_at: true,
+          },
         });
 
         if (!page) {
