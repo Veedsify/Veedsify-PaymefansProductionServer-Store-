@@ -74,8 +74,8 @@ export default function Home() {
             Shop by Category
           </h1>
           <p className="max-w-2xl text-sm sm:text-base text-slate-600 dark:text-slate-200">
-            Discover exclusive products and merchandise from your favorite
-            creators. Quality items across all categories.
+            Welcome to the Paymefans Store! Explore and shop exclusive Paymefans
+            merchandise, featuring our newest branded products.
           </p>
           <Link
             href="/orders"
