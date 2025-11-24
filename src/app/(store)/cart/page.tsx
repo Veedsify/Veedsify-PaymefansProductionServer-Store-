@@ -180,7 +180,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-300">
-                    Tax (7.5%)
+                    VAT (7.5%)
                   </span>
                   <span className="font-semibold text-gray-900 dark:text-white">
                     ₦ {numeral(tax).format("0,0.00")}

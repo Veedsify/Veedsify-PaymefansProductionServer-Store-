@@ -227,7 +227,7 @@ export default function OrdersPage() {
                                             return (
                                                 <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                                                     <span>Subtotal: ₦{numeral(orderSubtotal).format("0,0.00")}</span>
-                                                    <span>Tax: ₦{numeral(orderTax).format("0,0.00")}</span>
+                                                    <span>VAT: ₦{numeral(orderTax).format("0,0.00")}</span>
                                                 </div>
                                             );
                                         })()}
