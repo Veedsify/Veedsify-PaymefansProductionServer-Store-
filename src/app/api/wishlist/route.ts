@@ -49,10 +49,7 @@ export async function GET() {
                 category: {
                     name: item.product.category.name,
                 },
-                images: item.product.images.map((img: any) => ({
-                    id: img.id,
-                    image_url: `${config.cloudFrontUrl}/${img.image_url}`,
-                })),
+                images: item.product.images,
                 sizes: item.product.sizes.map((s: any) => ({
                     size: {
                         id: s.size.id,
@@ -135,10 +132,7 @@ export async function POST(request: Request) {
                     category: {
                         name: result.data.product.category.name,
                     },
-                    images: result.data.product.images.map((img: any) => ({
-                        id: img.id,
-                        image_url: `${config.cloudFrontUrl}/${img.image_url}`,
-                    })),
+                    images: result.data.product.images,
                     sizes: result.data.product.sizes.map((s: any) => ({
                         size: {
                             id: s.size.id,
