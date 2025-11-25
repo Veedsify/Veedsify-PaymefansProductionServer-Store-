@@ -18,31 +18,15 @@ import Sidebar from "./Sidebar";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [isDark, setIsDark] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
+  const [mounted, setMounted] = useState(false);
   // Subscribe to cart and wishlist counts for reactivity
   const cartCount = useCartStore((state) => state.getItemCount());
   const wishlistCount = useWishlistStore((state) => state.getWishlistCount());
 
   useEffect(() => {
     setMounted(true);
-    // Check if dark mode is enabled
-    const isDarkMode = document.documentElement.classList.contains("dark");
-    setIsDark(isDarkMode);
   }, []);
-
-  const toggleTheme = () => {
-    if (isDark) {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    }
-    setIsDark(!isDark);
-  };
 
   if (!mounted) return null;
 
@@ -83,13 +67,6 @@ export default function Navbar() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               {/* Menu Button */}
-              <button
-                onClick={() => setIsSidebarOpen(true)}
-                className="p-2 cursor-pointer text-gray-600 transition-colors rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
-                aria-label="Open menu"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
 
               {/* Logo */}
               <Link href="/store" className="flex items-center gap-2">
@@ -131,18 +108,14 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* Theme Toggle */}
             <button
-              onClick={toggleTheme}
-              className="p-2 text-gray-600 transition-colors rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Toggle theme"
+              onClick={() => setIsSidebarOpen(true)}
+              className="p-2 cursor-pointer text-gray-600 transition-colors rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Open menu"
             >
-              {isDark ? (
-                <Sun className="w-5 h-5" />
-              ) : (
-                <Moon className="w-5 h-5" />
-              )}
+              <Menu className="w-5 h-5" />
             </button>
+            {/* Theme Toggle */}
           </div>
         </div>
       </nav>

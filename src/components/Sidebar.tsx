@@ -10,6 +10,8 @@ import {
   Twitter,
   Instagram,
   Youtube,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { useStoreProducts } from "@/hooks/useStoreProducts";
 
@@ -21,6 +23,26 @@ interface SidebarProps {
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const [categories, setCategories] = useState<string[]>([]);
   const { data: productsData } = useStoreProducts(50);
+  const [isDark, setIsDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  const toggleTheme = () => {
+    if (isDark) {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    }
+    setIsDark(!isDark);
+  };
+
+  useEffect(() => {
+    setMounted(true);
+    // Check if dark mode is enabled
+    const isDarkMode = document.documentElement.classList.contains("dark");
+    setIsDark(isDarkMode);
+  }, []);
 
   useEffect(() => {
     // Get unique categories from all fetched products
@@ -45,6 +67,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
+
+  if (!mounted) return null;
 
   return (
     <>
@@ -74,6 +98,17 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
                 className="h-10"
               />
             </Link>
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-gray-600 transition-colors rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label="Toggle theme"
+            >
+              {isDark ? (
+                <Sun className="w-5 h-5" />
+              ) : (
+                <Moon className="w-5 h-5" />
+              )}
+            </button>
             <button
               onClick={onClose}
               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
