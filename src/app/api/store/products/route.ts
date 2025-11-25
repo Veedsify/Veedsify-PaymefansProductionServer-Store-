@@ -53,22 +53,13 @@ export async function GET(request: NextRequest) {
             products.pop(); // Remove the last item to fit the limit
         }
 
-        // Format products with CloudFront URLs
-        const formattedProducts = products.map((product) => ({
-            ...product,
-            images: product.images.map((img) => ({
-                id: img.id,
-                image_url: `${config.cloudFrontUrl}/${img.image_url}`,
-            })),
-        }));
-
         const response = {
           error: false,
           hasMore,
           perPage: Number(limit),
           totalProducts: countProducts,
           message: "Products fetched successfully",
-          data: formattedProducts,
+          data: products,
         };
 
         return NextResponse.json(response);

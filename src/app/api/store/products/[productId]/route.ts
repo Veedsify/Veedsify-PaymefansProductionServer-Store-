@@ -72,20 +72,11 @@ export async function GET(
             );
         }
 
-        // Format product with CloudFront URLs
-        const formattedProduct = {
-            ...productDetails,
-            images: productDetails.images.map((img) => ({
-                id: img.id,
-                image_url: `${config.cloudFrontUrl}/${img.image_url}`,
-            })),
-        };
-
         return NextResponse.json({
           error: false,
           message: "Product fetched successfully",
           status: 200,
-          data: formattedProduct,
+          data: productDetails,
         });
     } catch (error: any) {
         console.error("Error fetching product details:", error);
