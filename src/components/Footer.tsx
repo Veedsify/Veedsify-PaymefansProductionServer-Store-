@@ -20,12 +20,6 @@ export default function Footer() {
           {/* Links */}
           <div className="flex items-center gap-6">
             <Link
-              href="/pages/store-terms-and-conditions"
-              className="text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
-            >
-              Terms
-            </Link>
-            <Link
               href="/pages/store-privacy-policy"
               className="text-sm text-gray-600 dark:text-gray-300 hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
             >

@@ -78,15 +78,6 @@ export default function RootLayout({
                   {/* Links */}
                   <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 md:gap-6">
                     <Link
-                      href="/pages/store-terms-and-conditions"
-                      className="text-xs sm:text-sm text-gray-300 hover:text-primary-dark-pink dark:hover:text-pink-400 transition-colors duration-200 font-medium"
-                    >
-                      Terms of Service
-                    </Link>
-                    <span className="hidden sm:inline text-gray-500 dark:text-gray-600 text-xs">
-                      •
-                    </span>
-                    <Link
                       href="/pages/store-privacy-policy"
                       className="text-xs sm:text-sm text-gray-300 hover:text-primary-dark-pink dark:hover:text-pink-400 transition-colors duration-200 font-medium"
                     >

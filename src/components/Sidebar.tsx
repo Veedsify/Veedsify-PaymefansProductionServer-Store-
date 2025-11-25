@@ -217,13 +217,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="p-6 border-t border-gray-200 dark:border-slate-800">
             <div className="flex flex-wrap gap-4 text-xs text-gray-600 dark:text-gray-400">
               <Link
-                href="/pages/store-terms-and-conditions"
-                onClick={onClose}
-                className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
-              >
-                Terms
-              </Link>
-              <Link
                 href="/pages/store-privacy-policy"
                 onClick={onClose}
                 className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
