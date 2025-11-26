@@ -412,7 +412,7 @@ export default function ProductDetail() {
                     Free Shipping
                   </h3>
                   <p className="text-sm text-slate-600 dark:text-slate-300">
-                    On orders over $50
+                    On orders over ₦60,000
                   </p>
                 </div>
                 <div className="p-4 rounded bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2">

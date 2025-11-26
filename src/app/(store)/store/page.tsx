@@ -67,7 +67,7 @@ export default function Home() {
     <div className="min-h-dvh bg-white dark:bg-gray-950">
       <section className="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
         <header className="mb-6 sm:mb-8">
-          <h2 className="text-sm sm:text-base md:text-lg font-semibold dark:text-white">
+          <h2 className="text-sm sm:text-base md:text-lg font-semibold dark:text-white mb-2">
             HI {session?.user?.name}
           </h2>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-2">
