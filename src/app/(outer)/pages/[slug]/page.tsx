@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import prisma from "prisma/prisma";
 
@@ -58,6 +60,19 @@ export default async function OuterPage({ params }: PageProps) {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <header className="w-full border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/logos/logo1.svg"
+              width={80}
+              height={80}
+              alt="logo"
+              className="h-16 w-40"
+            />
+          </Link>
+        </div>
+      </header>
       <div className="bg-white dark:bg-gray-900 rounded-lg p-6 md:p-8">
         <h1 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
           {page.title}
