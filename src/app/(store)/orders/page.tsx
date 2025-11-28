@@ -224,10 +224,25 @@ export default function OrdersPage() {
                                                 0
                                             );
                                             const orderTax = orderSubtotal * 0.075;
+                                            
+                                            // Get delivery fee from shipping address
+                                            let deliveryFee = 0;
+                                            try {
+                                                const shippingAddr = typeof order.shipping_address === 'string' 
+                                                    ? JSON.parse(order.shipping_address) 
+                                                    : order.shipping_address;
+                                                deliveryFee = shippingAddr?.deliveryFee || 0;
+                                            } catch (e) {
+                                                // If parsing fails, delivery fee is 0
+                                            }
+                                            
                                             return (
                                                 <div className="flex items-center justify-between text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                                                     <span>Subtotal: ₦{numeral(orderSubtotal).format("0,0.00")}</span>
                                                     <span>VAT: ₦{numeral(orderTax).format("0,0.00")}</span>
+                                                    {deliveryFee > 0 && (
+                                                        <span>Shipping: ₦{numeral(deliveryFee).format("0,0.00")}</span>
+                                                    )}
                                                 </div>
                                             );
                                         })()}
@@ -318,7 +333,19 @@ export default function OrdersPage() {
                                                     0
                                                 );
                                                 const orderTax = orderSubtotal * 0.075;
-                                                const orderTotal = orderSubtotal + orderTax;
+                                                
+                                                // Get delivery fee from shipping address
+                                                let deliveryFee = 0;
+                                                try {
+                                                    const shippingAddr = typeof order.shipping_address === 'string' 
+                                                        ? JSON.parse(order.shipping_address) 
+                                                        : order.shipping_address;
+                                                    deliveryFee = shippingAddr?.deliveryFee || 0;
+                                                } catch (e) {
+                                                    // If parsing fails, delivery fee is 0
+                                                }
+                                                
+                                                const orderTotal = orderSubtotal + orderTax + deliveryFee;
                                                 return (
                                                     <div className="space-y-2 text-xs sm:text-sm">
                                                         <div className="flex justify-between">
@@ -335,6 +362,18 @@ export default function OrdersPage() {
                                                             </span>
                                                             <span className="font-semibold text-gray-900 dark:text-white">
                                                                 ₦ {numeral(orderTax).format("0,0.00")}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex justify-between">
+                                                            <span className="text-gray-600 dark:text-gray-300">
+                                                                Shipping
+                                                            </span>
+                                                            <span className="font-semibold text-gray-900 dark:text-white">
+                                                                {deliveryFee === 0 ? (
+                                                                    <span className="text-green-600 dark:text-green-400">Free</span>
+                                                                ) : (
+                                                                    `₦ ${numeral(deliveryFee).format("0,0.00")}`
+                                                                )}
                                                             </span>
                                                         </div>
                                                         <div className="flex justify-between border-t border-gray-300 dark:border-slate-700 pt-2">

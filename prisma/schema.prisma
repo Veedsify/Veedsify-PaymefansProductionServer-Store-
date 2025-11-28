@@ -1700,3 +1700,19 @@ enum InvitationStatus {
   DECLINED
   EXPIRED
 }
+
+model SocialLink {
+  id         Int            @id @default(autoincrement())
+  platform   String
+  url        String
+  category   SocialLinkCategory
+  created_at DateTime        @default(now())
+  updated_at DateTime        @updatedAt
+
+  @@index([category])
+}
+
+enum SocialLinkCategory {
+  main
+  store
+}

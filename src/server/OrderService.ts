@@ -3,6 +3,7 @@ import crypto from "crypto";
 import axios from "axios";
 import { inngest } from "@/inngest/client";
 import UserService from "./UserSevice";
+import { calculateDeliveryFee } from "@/utils/nigerianStates";
 
 interface CheckoutItem {
     product_id: string;
@@ -77,13 +78,15 @@ class OrderService {
      * Validate checkout items and calculate total
      */
     private static async validateAndCalculateTotal(
-        items: CheckoutItem[]
+        items: CheckoutItem[],
+        shippingAddress?: ShippingAddress
     ): Promise<{
         isValid: boolean;
         message?: string;
         total: number;
         subtotal: number;
         tax: number;
+        deliveryFee: number;
         validatedItems: any[];
     }> {
         try {
@@ -94,6 +97,7 @@ class OrderService {
                     total: 0,
                     subtotal: 0,
                     tax: 0,
+                    deliveryFee: 0,
                     validatedItems: [],
                 };
             }
@@ -121,6 +125,7 @@ class OrderService {
                         total: 0,
                         subtotal: 0,
                         tax: 0,
+                        deliveryFee: 0,
                         validatedItems: [],
                     };
                 }
@@ -133,6 +138,7 @@ class OrderService {
                         total: 0,
                         subtotal: 0,
                         tax: 0,
+                        deliveryFee: 0,
                         validatedItems: [],
                     };
                 }
@@ -149,6 +155,7 @@ class OrderService {
                             total: 0,
                             subtotal: 0,
                             tax: 0,
+                            deliveryFee: 0,
                             validatedItems: [],
                         };
                     }
@@ -169,13 +176,20 @@ class OrderService {
             // Calculate 7.5% tax on subtotal
             const taxRate = 0.075;
             const tax = total * taxRate;
-            const totalWithTax = total + tax;
+            
+            // Calculate delivery fee
+            const deliveryFee = shippingAddress
+                ? calculateDeliveryFee(shippingAddress.state, total)
+                : 0;
+            
+            const totalWithTaxAndDelivery = total + tax + deliveryFee;
 
             return {
                 isValid: true,
-                total: totalWithTax,
+                total: totalWithTaxAndDelivery,
                 subtotal: total,
                 tax,
+                deliveryFee,
                 validatedItems,
             };
         } catch (error) {
@@ -186,6 +200,7 @@ class OrderService {
                 total: 0,
                 subtotal: 0,
                 tax: 0,
+                deliveryFee: 0,
                 validatedItems: [],
             };
         }
@@ -320,7 +335,10 @@ class OrderService {
             }
 
             // Validate items and calculate total
-            const validation = await this.validateAndCalculateTotal(items);
+            const validation = await this.validateAndCalculateTotal(
+                items,
+                shipping_address
+            );
             if (!validation.isValid) {
                 return {
                     error: true,
@@ -331,13 +349,21 @@ class OrderService {
             const orderId = this.generateOrderId();
             const paymentReference = this.generatePaymentReference();
 
+            // Store delivery fee in shipping address JSON for reference
+            const shippingAddressWithDeliveryFee = {
+                ...shipping_address,
+                deliveryFee: validation.deliveryFee,
+            };
+
             // Create order in database with pending status
             const order = await prisma.order.create({
                 data: {
                     order_id: orderId,
                     user_id: userId,
                     total_amount: validation.total,
-                    shipping_address: JSON.stringify(shipping_address),
+                    shipping_address: JSON.stringify(
+                        shippingAddressWithDeliveryFee
+                    ),
                     payment_reference: paymentReference,
                     payment_status: "pending",
                     status: "pending",
@@ -392,6 +418,7 @@ class OrderService {
                     total_amount: validation.total,
                     subtotal: validation.subtotal,
                     tax: validation.tax,
+                    deliveryFee: validation.deliveryFee,
                 },
             };
         } catch (error: any) {
@@ -569,6 +596,19 @@ class OrderService {
 
               // Only send email if we have valid items
               if (emailItems.length > 0) {
+                // Ensure deliveryFee is included in shippingAddress for email
+                const emailShippingAddress = shippingAddress
+                  ? {
+                      ...shippingAddress,
+                      deliveryFee:
+                        shippingAddress.deliveryFee ||
+                        (typeof updatedOrder.shipping_address === "string"
+                          ? JSON.parse(updatedOrder.shipping_address)
+                          : updatedOrder.shipping_address)?.deliveryFee ||
+                        0,
+                    }
+                  : undefined;
+
                 await inngest.send({
                   name: "orders/confirmation.send",
                   data: {
@@ -587,7 +627,7 @@ class OrderService {
                     }),
                     items: emailItems,
                     totalAmount: updatedOrder.total_amount,
-                    shippingAddress: shippingAddress || undefined,
+                    shippingAddress: emailShippingAddress,
                   },
                 });
               } else {
@@ -954,6 +994,19 @@ class OrderService {
 
                       // Only send email if we have valid items
                       if (emailItems.length > 0) {
+                        // Ensure deliveryFee is included in shippingAddress for email
+                        const emailShippingAddress = shippingAddress
+                          ? {
+                              ...shippingAddress,
+                              deliveryFee:
+                                shippingAddress.deliveryFee ||
+                                (typeof updatedOrder.shipping_address === "string"
+                                  ? JSON.parse(updatedOrder.shipping_address)
+                                  : updatedOrder.shipping_address)?.deliveryFee ||
+                                0,
+                            }
+                          : undefined;
+
                         await inngest.send({
                           name: "orders/confirmation.send",
                           data: {
@@ -972,7 +1025,7 @@ class OrderService {
                             }),
                             items: emailItems,
                             totalAmount: updatedOrder.total_amount,
-                            shippingAddress: shippingAddress || undefined,
+                            shippingAddress: emailShippingAddress,
                           },
                         });
                       } else {

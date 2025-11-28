@@ -26,6 +26,7 @@ interface OrderConfirmationProps {
     state?: string;
     country?: string;
     phone?: string;
+    deliveryFee?: number;
   };
 }
 
@@ -118,13 +119,64 @@ export const OrderConfirmation = ({
         </Section>
       )}
 
+      {/* Order Summary */}
+      <Section style={orderInfoSection}>
+        <Text style={sectionTitle}>Order Summary</Text>
+        {(() => {
+          const subtotal = items.reduce(
+            (sum, item) => sum + item.price * item.quantity,
+            0
+          );
+          const tax = subtotal * 0.075;
+          const deliveryFee = shippingAddress?.deliveryFee || 0;
+          const calculatedTotal = subtotal + tax + deliveryFee;
+
+          return (
+            <>
+              <Row style={summaryRow}>
+                <Column style={summaryLabelColumn}>
+                  <Text style={summaryLabel}>Subtotal</Text>
+                </Column>
+                <Column style={summaryValueColumn}>
+                  <Text style={summaryValue}>{formatCurrency(subtotal)}</Text>
+                </Column>
+              </Row>
+              <Row style={summaryRow}>
+                <Column style={summaryLabelColumn}>
+                  <Text style={summaryLabel}>VAT (7.5%)</Text>
+                </Column>
+                <Column style={summaryValueColumn}>
+                  <Text style={summaryValue}>{formatCurrency(tax)}</Text>
+                </Column>
+              </Row>
+              <Row style={summaryRow}>
+                <Column style={summaryLabelColumn}>
+                  <Text style={summaryLabel}>Shipping</Text>
+                </Column>
+                <Column style={summaryValueColumn}>
+                  <Text style={summaryValue}>
+                    {deliveryFee === 0 ? (
+                      <span style={{ color: "#22c55e" }}>Free</span>
+                    ) : (
+                      formatCurrency(deliveryFee)
+                    )}
+                  </Text>
+                </Column>
+              </Row>
+            </>
+          );
+        })()}
+      </Section>
+
       <Section style={totalSection}>
         <Row>
           <Column style={totalLabelColumn}>
             <Text style={totalLabel}>Total Amount</Text>
           </Column>
           <Column style={totalValueColumn}>
-            <Text style={totalValue}>{formatCurrency(totalAmount)}</Text>
+            <Text style={totalValue}>
+              {formatCurrency(totalAmount || 0)}
+            </Text>
           </Column>
         </Row>
       </Section>
@@ -301,6 +353,34 @@ const totalValue = {
 const link = {
   color: "#cc0df8",
   textDecoration: "underline",
+};
+
+const summaryRow = {
+  marginBottom: "10px",
+};
+
+const summaryLabelColumn = {
+  width: "70%",
+  verticalAlign: "top" as const,
+};
+
+const summaryValueColumn = {
+  width: "30%",
+  textAlign: "right" as const,
+  verticalAlign: "top" as const,
+};
+
+const summaryLabel = {
+  fontSize: "14px",
+  color: "#4a4a4a",
+  marginBottom: "0",
+};
+
+const summaryValue = {
+  fontSize: "14px",
+  color: "#4a4a4a",
+  fontWeight: "bold",
+  marginBottom: "0",
 };
 
 export default OrderConfirmation;

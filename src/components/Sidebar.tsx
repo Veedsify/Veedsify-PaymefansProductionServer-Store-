@@ -12,8 +12,28 @@ import {
   Youtube,
   Sun,
   Moon,
+  Linkedin,
+  Github,
+  Globe,
 } from "lucide-react";
 import { useStoreProducts } from "@/hooks/useStoreProducts";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+// Map platform names to icons
+const getSocialIcon = (platform: string) => {
+  const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+    Twitter,
+    Instagram,
+    Youtube,
+    Facebook,
+    TikTok: IoLogoTiktok,
+    LinkedIn: Linkedin,
+    Github,
+    Website: Globe,
+  };
+  return iconMap[platform] || Globe;
+};
 
 interface SidebarProps {
   isOpen: boolean;
@@ -25,6 +45,18 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { data: productsData } = useStoreProducts(50);
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  // Fetch social links for store category
+  const { data: socialLinksData } = useQuery({
+    queryKey: ["social-links", "store"],
+    queryFn: async () => {
+      const response = await axios.get("/api/social-links/store");
+      return response.data;
+    },
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+  });
+
+  const socialLinks = socialLinksData?.socialLinks || [];
 
   const toggleTheme = () => {
     if (isDark) {
@@ -180,36 +212,57 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-4 uppercase tracking-wider">
                 Follow Us
               </h2>
-              <div className="flex items-center gap-3">
-                <a
-                  href="https://tiktok.com/@paymefansshop"
-                  className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
-                  aria-label="Facebook"
-                >
-                  <IoLogoTiktok className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://twitter.com/paymefansshop"
-                  className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
-                  aria-label="Twitter"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://instagram.com/paymefansshop"
-                  className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="w-5 h-5" />
-                </a>
-                <a
-                  href="https://youtube.com/@paymefansshop"
-                  className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
-                  aria-label="Youtube"
-                >
-                  <Youtube className="w-5 h-5" />
-                </a>
-              </div>
+              {socialLinks.length > 0 ? (
+                <div className="flex items-center gap-3">
+                  {socialLinks.map((link: any) => {
+                    const IconComponent = getSocialIcon(link.platform);
+                    return (
+                      <a
+                        key={link.id}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
+                        aria-label={link.platform}
+                      >
+                        <IconComponent className="w-5 h-5" />
+                      </a>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="flex items-center gap-3">
+                  {/* Fallback to default links if API fails */}
+                  <a
+                    href="https://tiktok.com/@paymefansshop"
+                    className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
+                    aria-label="TikTok"
+                  >
+                    <IoLogoTiktok className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="https://twitter.com/paymefansshop"
+                    className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
+                    aria-label="Twitter"
+                  >
+                    <Twitter className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="https://instagram.com/paymefansshop"
+                    className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="https://youtube.com/@paymefansshop"
+                    className="p-2.5 rounded-lg bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-pink-600 hover:text-white dark:hover:bg-pink-600 transition-colors"
+                    aria-label="Youtube"
+                  >
+                    <Youtube className="w-5 h-5" />
+                  </a>
+                </div>
+              )}
             </div>
           </div>
 

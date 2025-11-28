@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +9,10 @@ import { Loader2, ArrowLeft } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { useCheckout } from "@/hooks/useCheckout";
 import { useSession } from "next-auth/react";
+import {
+  NIGERIAN_STATES,
+  calculateDeliveryFee,
+} from "@/utils/nigerianStates";
 
 type ShippingAddress = {
   name: string;
@@ -25,7 +29,6 @@ export default function CheckoutPage() {
   const subtotal = useCartStore((state) => state.total());
   const taxRate = 0.075;
   const tax = subtotal * taxRate;
-  const cartTotal = subtotal + tax;
 
   const [shippingAddress, setShippingAddress] = useState<ShippingAddress>({
     name: session?.user?.name ?? "",
@@ -35,6 +38,14 @@ export default function CheckoutPage() {
     state: "",
     country: "Nigeria",
   });
+
+  // Calculate delivery fee based on selected state
+  const deliveryFee = useMemo(() => {
+    if (!shippingAddress.state) return 0;
+    return calculateDeliveryFee(shippingAddress.state, subtotal);
+  }, [shippingAddress.state, subtotal]);
+
+  const cartTotal = subtotal + tax + deliveryFee;
 
   const [errors, setErrors] = useState<Partial<ShippingAddress>>({});
   const checkoutMutation = useCheckout();
@@ -301,8 +312,7 @@ export default function CheckoutPage() {
                       >
                         State *
                       </label>
-                      <input
-                        type="text"
+                      <select
                         id="state"
                         value={shippingAddress.state}
                         onChange={(e) =>
@@ -313,7 +323,14 @@ export default function CheckoutPage() {
                             ? "border-red-500"
                             : "border-gray-300 dark:border-gray-600"
                         }`}
-                      />
+                      >
+                        <option value="">Select State</option>
+                        {NIGERIAN_STATES.map((state) => (
+                          <option key={state} value={state}>
+                            {state}
+                          </option>
+                        ))}
+                      </select>
                       {errors.state && (
                         <p className="mt-1 text-sm text-red-500">
                           {errors.state}
@@ -335,16 +352,14 @@ export default function CheckoutPage() {
                       onChange={(e) =>
                         handleInputChange("country", e.target.value)
                       }
-                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-600 focus:border-transparent dark:bg-gray-700 dark:text-white ${
+                      disabled
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-pink-600 focus:border-transparent dark:bg-gray-700 dark:text-white bg-gray-100 dark:bg-gray-800 cursor-not-allowed ${
                         errors.country
                           ? "border-red-500"
                           : "border-gray-300 dark:border-gray-600"
                       }`}
                     >
                       <option value="Nigeria">Nigeria</option>
-                      <option value="Ghana">Ghana</option>
-                      <option value="Kenya">Kenya</option>
-                      <option value="South Africa">South Africa</option>
                     </select>
                     {errors.country && (
                       <p className="mt-1 text-sm text-red-500">
@@ -432,7 +447,13 @@ export default function CheckoutPage() {
                     Shipping
                   </span>
                   <span className="font-semibold text-gray-900 dark:text-white">
-                    Free
+                    {deliveryFee === 0 ? (
+                      <span className="text-green-600 dark:text-green-400">
+                        Free
+                      </span>
+                    ) : (
+                      `₦ ${numeral(deliveryFee).format("0,0.00")}`
+                    )}
                   </span>
                 </div>
                 <div className="flex justify-between border-t border-gray-300 dark:border-slate-700 pt-3">

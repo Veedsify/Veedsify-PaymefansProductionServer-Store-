@@ -61,6 +61,17 @@ export async function POST(request: Request) {
             }
         }
 
+        // Validate country is Nigeria
+        if (shipping_address.country !== "Nigeria") {
+            return NextResponse.json(
+                {
+                    error: true,
+                    message: "We currently only ship to Nigeria",
+                },
+                { status: 400 }
+            );
+        }
+
         // Validate payment method
         if (payment_method !== "paystack") {
             return NextResponse.json(
