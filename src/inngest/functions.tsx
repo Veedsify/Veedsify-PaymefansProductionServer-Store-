@@ -3,6 +3,7 @@ import { inngest } from "./client";
 import mailer from "@/utils/nodemailer";
 import { Welcome } from "../../emails";
 import { OrderConfirmation } from "../../emails";
+import { CustomEmail } from "../../emails";
 
 interface OrderConfirmationEvent {
   email: string;
@@ -99,6 +100,64 @@ export const sendOrderConfirmationEmail = inngest.createFunction(
             (err: Error | null, info: any) => {
               if (err) {
                 console.error("Order confirmation email send error:", err);
+                reject({
+                  success: false,
+                  message: err.message || "Email Failed To Send",
+                });
+              } else {
+                resolve({
+                  success: true,
+                  message: "Email Sent Successfully",
+                });
+              }
+            }
+          );
+        }
+      );
+    });
+
+    return result;
+  }
+);
+
+interface ContactEmailEvent {
+  email: string;
+  name: string;
+  subject: string;
+  message: string;
+}
+
+export const sendContactEmail = inngest.createFunction(
+  { id: "send-contact-email" },
+  { event: "contact/email.send" },
+  async ({ event, step }) => {
+    const { email, name, subject, message } = event.data as ContactEmailEvent;
+
+    // Render the contact email template
+    const emailHtml = await step.run("render-email", async () => {
+      return await render(
+        <CustomEmail
+          name={name || "there"}
+          subject={subject || "Contact Form Submission"}
+          message={message || "This is a contact form submission."}
+        />
+      );
+    });
+
+    // Send the email
+    const result = await step.run("send-email", async () => {
+      return await new Promise<{ success: boolean; message: string }>(
+        (resolve, reject) => {
+          mailer.sendMail(
+            {
+              to: email,
+              subject: subject || "Contact Form Submission",
+              html: emailHtml,
+              from: `PayMeFans Store <info@paymefans.com>`,
+            },
+            (err: Error | null, info: any) => {
+              if (err) {
+                console.error("Contact email send error:", err);
                 reject({
                   success: false,
                   message: err.message || "Email Failed To Send",

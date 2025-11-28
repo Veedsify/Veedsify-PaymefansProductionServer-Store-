@@ -19,6 +19,7 @@ import {
 import { useStoreProducts } from "@/hooks/useStoreProducts";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import SupportModal from "./SupportModal";
 
 // Map platform names to icons
 const getSocialIcon = (platform: string) => {
@@ -45,6 +46,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { data: productsData } = useStoreProducts(50);
   const [isDark, setIsDark] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
 
   // Fetch social links for store category
   const { data: socialLinksData } = useQuery({
@@ -276,16 +278,24 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               >
                 Privacy
               </Link>
-              <a
-                href="mailto:support@paymefans.com"
+              <button
+                onClick={() => {
+                  setIsSupportModalOpen(true);
+                }}
                 className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors"
               >
                 Support
-              </a>
+              </button>
             </div>
           </div>
         </div>
       </aside>
+
+      {/* Support Modal */}
+      <SupportModal
+        isOpen={isSupportModalOpen}
+        onClose={() => setIsSupportModalOpen(false)}
+      />
     </>
   );
 }

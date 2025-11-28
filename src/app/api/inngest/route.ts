@@ -3,10 +3,11 @@ import { inngest } from "../../../inngest/client";
 import {
   sendEmailQueue,
   sendOrderConfirmationEmail,
+  sendContactEmail,
 } from "@/inngest/functions";
 
 // Create an API that serves zero functions
 export const { GET, POST, PUT } = serve({
   client: inngest,
-  functions: [sendEmailQueue, sendOrderConfirmationEmail],
+  functions: [sendEmailQueue, sendOrderConfirmationEmail, sendContactEmail],
 });
