@@ -37,7 +37,12 @@ export const PurchaseConfirmation = ({
       <Section style={detailsSection}>
         <Text style={detailsTitle}>Purchase Details:</Text>
         <Text style={detailsText}>Product: {productName}</Text>
-        <Text style={detailsText}>Price: {productPrice}</Text>
+        <Text style={detailsText}>
+          Price:{" "}
+          {productPrice?.startsWith("₦") || productPrice?.startsWith("$")
+            ? productPrice.replace(/^\$/, "₦")
+            : `₦${productPrice}`}
+        </Text>
         <Text style={detailsText}>Order ID: {orderId}</Text>
         <Text style={detailsText}>Date: {date}</Text>
       </Section>

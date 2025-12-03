@@ -15,6 +15,7 @@ export { UserBanned } from "./UserBanned";
 export { VerificationComplete } from "./VerificationComplete";
 export { InitiateWithdrawal } from "./InitiateWithdrawal";
 export { WithdrawalProcessing } from "./WithdrawalProcessing";
+export { WithdrawalFailed } from "./WithdrawalFailed";
 export { ConfirmWithdrawal } from "./ConfirmWithdrawal";
 export { PointPurchase } from "./PointPurchase";
 export { PurchaseConfirmation } from "./PurchaseConfirmation";

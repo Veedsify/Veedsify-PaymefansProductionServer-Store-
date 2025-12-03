@@ -31,14 +31,14 @@ export const ConfirmWithdrawal = ({
       <Heading style={heading}>Dear {name},</Heading>
       <Text style={paragraph}>
         We have received your withdrawal request of{" "}
-        <span style={strong}>${amount}</span> from your PayMeFans account.
+        <span style={strong}>₦{amount}</span> from your PayMeFans account.
       </Text>
       <Text style={paragraph}>
         <span style={strong}>Withdrawal Details:</span>
       </Text>
       <Section style={detailsSection}>
         <Text style={detailsText}>
-          <span style={strong}>Amount:</span> ${amount}
+          <span style={strong}>Amount:</span> ₦{amount}
         </Text>
         <Text style={detailsText}>
           <span style={strong}>Bank Name:</span> {bankName}

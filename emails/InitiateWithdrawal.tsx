@@ -27,7 +27,7 @@ export const InitiateWithdrawal = ({
       <Heading style={heading}>Dear {name},</Heading>
       <Text style={paragraph}>
         We have received your withdrawal request of{" "}
-        <span style={strong}>${amount}</span> from your PayMeFans account.
+        <span style={strong}>₦{amount}</span> from your PayMeFans account.
       </Text>
       <Text style={paragraph}>
         Use the verification code below to confirm your identity and complete

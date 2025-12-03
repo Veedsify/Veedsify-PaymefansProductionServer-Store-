@@ -4,10 +4,12 @@ import { EmailLayout } from "./components/EmailLayout";
 
 interface WithdrawalProcessingProps {
   name?: string;
+  amount?: string;
 }
 
 export const WithdrawalProcessing = ({
   name = "there",
+  amount = "0",
 }: WithdrawalProcessingProps) => {
   return (
     <EmailLayout
@@ -22,7 +24,8 @@ export const WithdrawalProcessing = ({
     >
       <Heading style={heading}>Dear {name},</Heading>
       <Text style={paragraph}>
-        We've received your withdrawal request on PayMeFans and are pleased to
+        We've received your withdrawal request of{" "}
+        <span style={strong}>₦{amount}</span> on PayMeFans and are pleased to
         inform you that it's currently being processed.
       </Text>
       <Text style={paragraph}>
@@ -32,8 +35,8 @@ export const WithdrawalProcessing = ({
       </Text>
       <Text style={paragraph}>
         We'll review your withdrawal request and verify the payout details. If
-        everything is in order, you can expect to receive your payout within
-        the next 24 hours.
+        everything is in order, you can expect to receive your payout within the
+        next 24 hours.
       </Text>
       <Text style={paragraph}>
         You'll receive a confirmation email with the payout details once the

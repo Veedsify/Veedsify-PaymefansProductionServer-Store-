@@ -30,12 +30,12 @@ export const WithdrawalSuccessful = ({
         has been successfully processed!
       </Text>
       <Text style={paragraph}>
-        The funds have been sent to your designated payout method, and you should
-        receive them shortly.
+        The funds have been sent to your designated payout method, and you
+        should receive them shortly.
       </Text>
       <Section style={detailsSection}>
         <Text style={detailsTitle}>Transaction Details:</Text>
-        <Text style={detailsText}>Withdrawal Amount: {amount}</Text>
+        <Text style={detailsText}>Withdrawal Amount: ₦{amount}</Text>
         <Text style={detailsText}>Transaction ID: {transactionId}</Text>
       </Section>
       <Text style={paragraph}>
