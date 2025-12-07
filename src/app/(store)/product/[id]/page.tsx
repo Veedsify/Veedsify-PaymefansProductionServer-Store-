@@ -153,8 +153,8 @@ export default function ProductDetail() {
               {/* Main Image */}
               <div className="relative max-w-2xl aspect-3/4 bg-slate-100 dark:bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
                 <Image
-                  width={640}
-                  height={853}
+                  width={720}
+                  height={960}
                   src={
                     product.images[selectedImageIndex]?.image_url ||
                     "/placeholder.png"
