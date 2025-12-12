@@ -211,32 +211,38 @@ model Model {
   verification_state  VerificationStateEnum @default(not_started)
   token               String?               @unique
   created_at          DateTime              @default(now())
+  updated_at          DateTime              @updatedAt @default(now())
   watermark           String?               @default("/site/watermark.png")
   user                User                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 }
 
 model UploadedMedia {
-  id          Int        @id @default(autoincrement())
-  media_id    String     @unique
-  user_id     Int
-  key         String?
-  type        String
-  url         String?
-  name        String
-  size        Int?
-  extension   String?
-  media_state MediaState @default(processing)
-  created_at  DateTime   @default(now())
-  updated_at  DateTime   @updatedAt
-  user        User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  id             Int        @id @default(autoincrement())
+  media_id       String     @unique
+  cloudflare_uid String?    @unique
+  user_id        Int
+  key            String?
+  type           String
+  url            String?
+  poster         String?
+  blur           String?
+  duration       String?
+  name           String
+  size           Int?
+  extension      String?
+  media_state    MediaState @default(processing)
+  attached       Boolean    @default(false)
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+  user           User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([user_id])
 }
 
 model UserMedia {
   id            Int        @id @default(autoincrement())
-  media_id      String     @unique
-  post_id       Int
+  media_id      String?     @unique 
+  post_id       Int?
   media_type    String
   media_state   MediaState @default(processing)
   duration      String?    @default("")
@@ -248,7 +254,7 @@ model UserMedia {
   created_at    DateTime   @default(now())
   updated_at    DateTime   @updatedAt
   user_id       Int
-  post          Post       @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  post          Post?        @relation(fields: [post_id], references: [id], onDelete: Cascade)
   user          User       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@index([post_id])
@@ -1714,12 +1720,12 @@ enum InvitationStatus {
 }
 
 model SocialLink {
-  id         Int            @id @default(autoincrement())
+  id         Int                @id @default(autoincrement())
   platform   String
   url        String
   category   SocialLinkCategory
-  created_at DateTime        @default(now())
-  updated_at DateTime        @updatedAt
+  created_at DateTime           @default(now())
+  updated_at DateTime           @updatedAt
 
   @@index([category])
 }
