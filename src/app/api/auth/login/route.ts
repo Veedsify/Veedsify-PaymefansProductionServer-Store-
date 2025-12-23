@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
         {
           status: 400,
           statusText: "Bad Request",
-        }
+        },
       );
     }
 
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
         error: true,
         message: "Failed to retrieve user",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -41,6 +41,6 @@ export const useOrderStore = create<OrderStore>()(
     {
       name: "order-storage",
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );

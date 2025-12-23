@@ -7,7 +7,7 @@ import { useWishlistStore } from "@/stores/wishlistStore";
 
 export default function BottomNav() {
   const pathname = usePathname();
-  
+
   // Subscribe to store changes reactively - this will cause re-render when counts change
   const cartCount = useCartStore((state) => state.getItemCount());
   const wishlistCount = useWishlistStore((state) => state.getWishlistCount());
@@ -64,7 +64,9 @@ export default function BottomNav() {
                   </span>
                 ) : null}
               </div>
-              <span className="text-[10px] font-medium leading-tight">{item.label}</span>
+              <span className="text-[10px] font-medium leading-tight">
+                {item.label}
+              </span>
             </Link>
           );
         })}

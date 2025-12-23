@@ -16,7 +16,7 @@ export default function CartPage() {
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
   const subtotal = items.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
-    0
+    0,
   );
   const taxRate = 0.075;
   const tax = subtotal * taxRate;
@@ -152,7 +152,7 @@ export default function CartPage() {
                     <p className="text-lg font-bold text-gray-900 dark:text-white">
                       ₦{" "}
                       {numeral(item.product.price * item.quantity).format(
-                        "0,0.00"
+                        "0,0.00",
                       )}
                     </p>
                   </div>

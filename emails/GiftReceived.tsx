@@ -26,8 +26,8 @@ export const GiftReceived = ({
     >
       <Heading style={heading}>Hi {name},</Heading>
       <Text style={paragraph}>
-        We're excited to inform you that you've received a gift from one of
-        your amazing fans!
+        We're excited to inform you that you've received a gift from one of your
+        amazing fans!
       </Text>
       <Text style={paragraph}>
         <span style={strong}>{username}</span> has sent you{" "}

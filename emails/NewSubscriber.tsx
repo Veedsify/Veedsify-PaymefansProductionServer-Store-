@@ -26,9 +26,8 @@ export const NewSubscriber = ({
     >
       <Heading style={heading}>Hi {name},</Heading>
       <Text style={paragraph}>
-        We're excited to inform you that{" "}
-        <span style={strong}>@{username}</span> has subscribed to your exclusive
-        content for 1 month!
+        We're excited to inform you that <span style={strong}>@{username}</span>{" "}
+        has subscribed to your exclusive content for 1 month!
       </Text>
       <Text style={paragraph}>
         Their subscription is now active, and they'll enjoy access to your

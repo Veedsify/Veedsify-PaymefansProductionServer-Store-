@@ -46,13 +46,13 @@ export const useAddToWishlist = () => {
 export const useRemoveFromWishlist = () => {
   const queryClient = useQueryClient();
   const removeFromWishlist = useWishlistStore(
-    (state) => state.removeFromWishlist
+    (state) => state.removeFromWishlist,
   );
 
   return useMutation({
     mutationFn: async (productId: number) => {
       const response = await axios.delete(
-        ROUTE.WISHLIST_REMOVE(String(productId))
+        ROUTE.WISHLIST_REMOVE(String(productId)),
       );
       return response.data;
     },

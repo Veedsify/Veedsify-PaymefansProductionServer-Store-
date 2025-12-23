@@ -9,263 +9,257 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
 const page = () => {
-    const router = useRouter();
-    const [showQuestion, setShowQuestion] = useState(true);
-    const [showLoginPage, setShowLoginPage] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const { data: session } = useSession();
-    const [loginCredentials, setLoginCredentials] = useState({
-        email: "",
-        password: "",
-    });
+  const router = useRouter();
+  const [showQuestion, setShowQuestion] = useState(true);
+  const [showLoginPage, setShowLoginPage] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { data: session } = useSession();
+  const [loginCredentials, setLoginCredentials] = useState({
+    email: "",
+    password: "",
+  });
 
-    const { mutate: loginMutate, isPending } = useMutation({
-      mutationFn: async () => {
-        const res = await fetch(`/api/auth/login`, {
-          body: JSON.stringify(loginCredentials),
-          method: "post",
-        });
-        return await res.json();
-      },
-      onSuccess: (data) => {
-        if (!data.error) {
-          router.push("/store");
-        } else {
-          toast.error(data.message, {
-            id: "login",
-          });
-        }
-      },
-      onError: (error: any) => {
-        toast.error(
-          error.response?.data?.message ||
-            error.response?.data?.error ||
-            "An error occurred while logging in",
-          { id: "login" }
-        );
-      },
-    });
-
-    const handleLoginInput = (e: ChangeEvent<HTMLInputElement>) => {
-      setLoginCredentials({
-        ...loginCredentials,
-        [e.target.name]: e.target.value,
+  const { mutate: loginMutate, isPending } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/auth/login`, {
+        body: JSON.stringify(loginCredentials),
+        method: "post",
       });
-    };
-
-    const handleLoginSubmit = async (e: FormEvent) => {
-      e.preventDefault();
-      loginMutate();
-    };
-
-    useLayoutEffect(() => {
-      if (session?.user && showLoginPage) {
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      if (!data.error) {
         router.push("/store");
+      } else {
+        toast.error(data.message, {
+          id: "login",
+        });
       }
-    }, [session?.user, showLoginPage]);
+    },
+    onError: (error: any) => {
+      toast.error(
+        error.response?.data?.message ||
+          error.response?.data?.error ||
+          "An error occurred while logging in",
+        { id: "login" },
+      );
+    },
+  });
 
-    if (showQuestion) {
-      return (
-        <div className="min-h-dvh bg-black flex items-center justify-center px-3 sm:px-4 py-4 sm:py-8">
-          <div className="w-full max-w-md">
-            <div className="text-center space-y-4 sm:space-y-6 md:space-y-8 animate-in">
-              {/* Logo/Brand */}
-              <div className="space-y-1 sm:space-y-2">
-                <Link
-                  href="/"
-                  className="flex items-center gap-2 justify-center"
-                >
-                  <Image
-                    src={"/logos/logo4.svg"}
-                    alt="Logo"
-                    width={150}
-                    height={40}
-                    className="h-8 sm:h-10"
-                  />
-                </Link>
-                <p className="text-gray-300 text-sm sm:text-base md:text-lg">
-                  Welcome! to PayMeFans Store
-                </p>
-              </div>
+  const handleLoginInput = (e: ChangeEvent<HTMLInputElement>) => {
+    setLoginCredentials({
+      ...loginCredentials,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-              {/* Question Card */}
-              <div className="bg-black flex flex-col rounded-xl relative p-4 sm:p-6 md:p-8  shadow-lg border border-white/10 backdrop-blur-sm">
-                <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white mb-4 sm:mb-6 px-2">
-                  Are you a PayMeFans User?
-                </h2>
-                <div className="flex-1 flex items-center justify-center py-12">
-                  <Image
-                    src={"/cover-image.jpg"}
-                    alt="Cover Image"
-                    unoptimized
-                    width={400}
-                    height={300}
-                    className="mx-auto block mb-4 sm:mb-6 rounded-xl w-1/2 h-auto"
-                  />
-                </div>
+  const handleLoginSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    loginMutate();
+  };
 
-                <div className="flex flex-col w-full gap-3 sm:gap-4 left-0 p-3 sm:p-4 rounded-xl">
-                  <button
-                    onClick={() => {
-                      setShowQuestion(false);
-                      setShowLoginPage(true);
-                    }}
-                    className="w-full bg-primary-dark-pink hover:bg-pink-400 text-white font-semibold text-sm sm:text-base py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg hover:shadow-primary-dark-pink/25 active:scale-[0.98]"
-                  >
-                    Yes, I have an account
-                  </button>
+  useLayoutEffect(() => {
+    if (session?.user && showLoginPage) {
+      router.push("/store");
+    }
+  }, [session?.user, showLoginPage]);
 
-                  {/* No Button */}
-                  <Link
-                    href={"https://paymefans.com/register"}
-                    className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 transform hover:scale-105 border border-white/20 active:scale-[0.98]"
-                  >
-                    No, I'm new here
-                  </Link>
-                </div>
-              </div>
-
-              {/* Additional Info */}
-              <p className="text-xs sm:text-sm text-gray-400 px-2">
-                Join thousands of creators earning with PayMeFans
+  if (showQuestion) {
+    return (
+      <div className="min-h-dvh bg-black flex items-center justify-center px-3 sm:px-4 py-4 sm:py-8">
+        <div className="w-full max-w-md">
+          <div className="text-center space-y-4 sm:space-y-6 md:space-y-8 animate-in">
+            {/* Logo/Brand */}
+            <div className="space-y-1 sm:space-y-2">
+              <Link href="/" className="flex items-center gap-2 justify-center">
+                <Image
+                  src={"/logos/logo4.svg"}
+                  alt="Logo"
+                  width={150}
+                  height={40}
+                  className="h-8 sm:h-10"
+                />
+              </Link>
+              <p className="text-gray-300 text-sm sm:text-base md:text-lg">
+                Welcome! to PayMeFans Store
               </p>
             </div>
-          </div>
-        </div>
-      );
-    }
 
-    if (showLoginPage) {
-      return (
-        <div className="min-h-dvh bg-black flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8 md:py-12">
-          <div className="w-full max-w-md animate-in">
-            {/* Login Form */}
-            <div className="space-y-4 sm:space-y-5 md:space-y-6">
-              <div className="text-center space-y-1 sm:space-y-2">
+            {/* Question Card */}
+            <div className="bg-black flex flex-col rounded-xl relative p-4 sm:p-6 md:p-8  shadow-lg border border-white/10 backdrop-blur-sm">
+              <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-white mb-4 sm:mb-6 px-2">
+                Are you a PayMeFans User?
+              </h2>
+              <div className="flex-1 flex items-center justify-center py-12">
+                <Image
+                  src={"/cover-image.jpg"}
+                  alt="Cover Image"
+                  unoptimized
+                  width={400}
+                  height={300}
+                  className="mx-auto block mb-4 sm:mb-6 rounded-xl w-1/2 h-auto"
+                />
+              </div>
+
+              <div className="flex flex-col w-full gap-3 sm:gap-4 left-0 p-3 sm:p-4 rounded-xl">
+                <button
+                  onClick={() => {
+                    setShowQuestion(false);
+                    setShowLoginPage(true);
+                  }}
+                  className="w-full bg-primary-dark-pink hover:bg-pink-400 text-white font-semibold text-sm sm:text-base py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 transform hover:scale-105 hover:shadow-lg hover:shadow-primary-dark-pink/25 active:scale-[0.98]"
+                >
+                  Yes, I have an account
+                </button>
+
+                {/* No Button */}
                 <Link
-                  href="/"
-                  className="flex items-center gap-2 justify-center"
+                  href={"https://paymefans.com/register"}
+                  className="w-full bg-white/10 hover:bg-white/20 text-white font-semibold text-sm sm:text-base py-3 sm:py-4 px-4 sm:px-6 rounded-lg transition-all duration-200 transform hover:scale-105 border border-white/20 active:scale-[0.98]"
                 >
-                  <Image
-                    src={"/logos/logo4.svg"}
-                    alt="Logo"
-                    width={150}
-                    height={40}
-                    className="h-8 sm:h-10"
-                  />
+                  No, I'm new here
                 </Link>
-                <h1 className="text-2xl sm:text-3xl font-bold text-white">
-                  Welcome back
-                </h1>
-                <p className="text-sm sm:text-base text-gray-300">
-                  Sign in to your account to continue
-                </p>
               </div>
-
-              <div className="bg-white/5 rounded-2xl p-5 sm:p-6 md:p-8 shadow-lg border border-white/10 backdrop-blur-sm">
-                <form
-                  onSubmit={handleLoginSubmit}
-                  className="space-y-4 sm:space-y-5"
-                >
-                  {/* Email Input */}
-                  <div className="flex flex-col gap-2">
-                    <input
-                      type="email"
-                      name="email"
-                      value={loginCredentials.email}
-                      onChange={handleLoginInput}
-                      className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl outline-none focus:border-primary-dark-pink/50 focus:ring-2 focus:ring-primary-dark-pink/20 transition-all duration-200 backdrop-blur-sm"
-                      placeholder="Enter your email"
-                    />
-                  </div>
-
-                  {/* Password Input */}
-                  <div className="flex flex-col gap-2 relative">
-                    <div className="relative">
-                      <input
-                        type={showPassword ? "text" : "password"}
-                        name="password"
-                        value={loginCredentials.password}
-                        onChange={handleLoginInput}
-                        className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl outline-none focus:border-primary-dark-pink/50 focus:ring-2 focus:ring-primary-dark-pink/20 transition-all duration-200 backdrop-blur-sm pr-10 sm:pr-12"
-                        placeholder="Enter your password"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-2 sm:right-3 top-1/2 transform cursor-pointer -translate-y-1/2 text-gray-300 hover:text-white focus:outline-none"
-                      >
-                        {showPassword ? (
-                          <LucideEye className="w-4 h-4 sm:w-5 sm:h-5" />
-                        ) : (
-                          <LucideEyeClosed className="w-4 h-4 sm:w-5 sm:h-5" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Remember & Forgot Password */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="remember"
-                        id="remember"
-                        className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded border-white/20 bg-white/5 text-primary-dark-pink focus:ring-primary-dark-pink/50 focus:ring-2 accent-primary-dark-pink"
-                      />
-                      <label
-                        htmlFor="remember"
-                        className="text-xs sm:text-sm font-medium text-gray-300 cursor-pointer select-none ml-2"
-                      >
-                        Remember me
-                      </label>
-                    </div>
-                    <Link
-                      href="https://paymefans.com/reset"
-                      className="text-xs sm:text-sm font-medium text-primary-dark-pink hover:text-pink-400 transition-colors duration-200"
-                    >
-                      Forgot password?
-                    </Link>
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    className="w-full px-4 py-2.5 sm:py-3 text-sm font-semibold text-white rounded-xl bg-primary-dark-pink hover:bg-pink-400 transition-all duration-200 shadow-lg hover:shadow-primary-dark-pink/25 hover:shadow-xl active:scale-[0.98]"
-                  >
-                    {isPending ? "Logging in..." : "Log In"}
-                  </button>
-                </form>
-              </div>
-
-              {/* Sign Up Link */}
-              <div className="text-center">
-                <p className="text-xs sm:text-sm font-medium text-gray-300">
-                  Don't have an account?{" "}
-                  <Link
-                    href="https://paymefans.com/register"
-                    className="font-semibold text-primary-dark-pink hover:text-pink-400 transition-colors duration-200"
-                  >
-                    Sign up
-                  </Link>
-                </p>
-              </div>
-
-              {/* Back Button */}
-              <button
-                onClick={() => {
-                  setShowLoginPage(false);
-                  setShowQuestion(true);
-                }}
-                className="w-full text-center text-xs sm:text-sm text-gray-400 hover:text-primary-dark-pink transition-colors py-2"
-              >
-                ← Back to options
-              </button>
             </div>
+
+            {/* Additional Info */}
+            <p className="text-xs sm:text-sm text-gray-400 px-2">
+              Join thousands of creators earning with PayMeFans
+            </p>
           </div>
         </div>
-      );
-    }
+      </div>
+    );
+  }
+
+  if (showLoginPage) {
+    return (
+      <div className="min-h-dvh bg-black flex items-center justify-center px-3 sm:px-4 py-6 sm:py-8 md:py-12">
+        <div className="w-full max-w-md animate-in">
+          {/* Login Form */}
+          <div className="space-y-4 sm:space-y-5 md:space-y-6">
+            <div className="text-center space-y-1 sm:space-y-2">
+              <Link href="/" className="flex items-center gap-2 justify-center">
+                <Image
+                  src={"/logos/logo4.svg"}
+                  alt="Logo"
+                  width={150}
+                  height={40}
+                  className="h-8 sm:h-10"
+                />
+              </Link>
+              <h1 className="text-2xl sm:text-3xl font-bold text-white">
+                Welcome back
+              </h1>
+              <p className="text-sm sm:text-base text-gray-300">
+                Sign in to your account to continue
+              </p>
+            </div>
+
+            <div className="bg-white/5 rounded-2xl p-5 sm:p-6 md:p-8 shadow-lg border border-white/10 backdrop-blur-sm">
+              <form
+                onSubmit={handleLoginSubmit}
+                className="space-y-4 sm:space-y-5"
+              >
+                {/* Email Input */}
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="email"
+                    name="email"
+                    value={loginCredentials.email}
+                    onChange={handleLoginInput}
+                    className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl outline-none focus:border-primary-dark-pink/50 focus:ring-2 focus:ring-primary-dark-pink/20 transition-all duration-200 backdrop-blur-sm"
+                    placeholder="Enter your email"
+                  />
+                </div>
+
+                {/* Password Input */}
+                <div className="flex flex-col gap-2 relative">
+                  <div className="relative">
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      value={loginCredentials.password}
+                      onChange={handleLoginInput}
+                      className="block w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-xl outline-none focus:border-primary-dark-pink/50 focus:ring-2 focus:ring-primary-dark-pink/20 transition-all duration-200 backdrop-blur-sm pr-10 sm:pr-12"
+                      placeholder="Enter your password"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-2 sm:right-3 top-1/2 transform cursor-pointer -translate-y-1/2 text-gray-300 hover:text-white focus:outline-none"
+                    >
+                      {showPassword ? (
+                        <LucideEye className="w-4 h-4 sm:w-5 sm:h-5" />
+                      ) : (
+                        <LucideEyeClosed className="w-4 h-4 sm:w-5 sm:h-5" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Remember & Forgot Password */}
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      name="remember"
+                      id="remember"
+                      className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded border-white/20 bg-white/5 text-primary-dark-pink focus:ring-primary-dark-pink/50 focus:ring-2 accent-primary-dark-pink"
+                    />
+                    <label
+                      htmlFor="remember"
+                      className="text-xs sm:text-sm font-medium text-gray-300 cursor-pointer select-none ml-2"
+                    >
+                      Remember me
+                    </label>
+                  </div>
+                  <Link
+                    href="https://paymefans.com/reset"
+                    className="text-xs sm:text-sm font-medium text-primary-dark-pink hover:text-pink-400 transition-colors duration-200"
+                  >
+                    Forgot password?
+                  </Link>
+                </div>
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  className="w-full px-4 py-2.5 sm:py-3 text-sm font-semibold text-white rounded-xl bg-primary-dark-pink hover:bg-pink-400 transition-all duration-200 shadow-lg hover:shadow-primary-dark-pink/25 hover:shadow-xl active:scale-[0.98]"
+                >
+                  {isPending ? "Logging in..." : "Log In"}
+                </button>
+              </form>
+            </div>
+
+            {/* Sign Up Link */}
+            <div className="text-center">
+              <p className="text-xs sm:text-sm font-medium text-gray-300">
+                Don't have an account?{" "}
+                <Link
+                  href="https://paymefans.com/register"
+                  className="font-semibold text-primary-dark-pink hover:text-pink-400 transition-colors duration-200"
+                >
+                  Sign up
+                </Link>
+              </p>
+            </div>
+
+            {/* Back Button */}
+            <button
+              onClick={() => {
+                setShowLoginPage(false);
+                setShowQuestion(true);
+              }}
+              className="w-full text-center text-xs sm:text-sm text-gray-400 hover:text-primary-dark-pink transition-colors py-2"
+            >
+              ← Back to options
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 };
 
 export default page;

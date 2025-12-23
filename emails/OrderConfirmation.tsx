@@ -125,7 +125,7 @@ export const OrderConfirmation = ({
         {(() => {
           const subtotal = items.reduce(
             (sum, item) => sum + item.price * item.quantity,
-            0
+            0,
           );
           const tax = subtotal * 0.075;
           const deliveryFee = shippingAddress?.deliveryFee || 0;
@@ -174,9 +174,7 @@ export const OrderConfirmation = ({
             <Text style={totalLabel}>Total Amount</Text>
           </Column>
           <Column style={totalValueColumn}>
-            <Text style={totalValue}>
-              {formatCurrency(totalAmount || 0)}
-            </Text>
+            <Text style={totalValue}>{formatCurrency(totalAmount || 0)}</Text>
           </Column>
         </Row>
       </Section>
@@ -384,4 +382,3 @@ const summaryValue = {
 };
 
 export default OrderConfirmation;
-

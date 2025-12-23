@@ -8,16 +8,14 @@ const ROUTE = {
    * @param {number} page - The page number
    * @returns {string} The URL to fetch store products
    */
-  FETCH_STORE_PRODUCTS: (page: number) =>
-    `/api/store/products?page=${page}`,
+  FETCH_STORE_PRODUCTS: (page: number) => `/api/store/products?page=${page}`,
 
   /**
    * Endpoint for fetching a specific product from the store by ID.
    * @param {string} product_id - The product ID
    * @returns {string} The URL to fetch the product
    */
-  FETCH_PRODUCT: (product_id: string) =>
-    `/api/store/products/${product_id}`,
+  FETCH_PRODUCT: (product_id: string) => `/api/store/products/${product_id}`,
 
   /**
    * Endpoint for store checkout
@@ -30,8 +28,7 @@ const ROUTE = {
    * @param {string} reference - The payment reference
    * @returns {string} The URL to verify payment
    */
-  VERIFY_PAYMENT: (reference: string) =>
-    `/api/payment/verify/${reference}`,
+  VERIFY_PAYMENT: (reference: string) => `/api/payment/verify/${reference}`,
 
   /**
    * Endpoint for fetching user orders
@@ -44,16 +41,14 @@ const ROUTE = {
    * @param {string} order_id - The order ID
    * @returns {string} The URL to fetch the order
    */
-  GET_ORDER: (order_id: string) =>
-    `/api/orders/${order_id}`,
+  GET_ORDER: (order_id: string) => `/api/orders/${order_id}`,
 
   /**
    * Endpoint for updating order status
    * @param {string} order_id - The order ID
    * @returns {string} The URL to update order status
    */
-  UPDATE_ORDER_STATUS: (order_id: string) =>
-    `/api/orders/${order_id}`,
+  UPDATE_ORDER_STATUS: (order_id: string) => `/api/orders/${order_id}`,
 
   /**
    * Endpoint for adding product to wishlist
@@ -66,8 +61,7 @@ const ROUTE = {
    * @param {string} product_id - The product ID
    * @returns {string} The URL to remove product from wishlist
    */
-  WISHLIST_REMOVE: (product_id: string) =>
-    `/api/wishlist/${product_id}`,
+  WISHLIST_REMOVE: (product_id: string) => `/api/wishlist/${product_id}`,
 
   /**
    * Endpoint for fetching user's wishlist
@@ -80,8 +74,7 @@ const ROUTE = {
    * @param {string} product_id - The product ID
    * @returns {string} The URL to check wishlist status
    */
-  WISHLIST_CHECK: (product_id: string) =>
-    `/api/wishlist/check/${product_id}`,
+  WISHLIST_CHECK: (product_id: string) => `/api/wishlist/check/${product_id}`,
 
   /**
    * Endpoint for getting wishlist count

@@ -39,17 +39,21 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
           id: "support-submit",
         });
       } else {
-        toast.success("Message sent successfully! We'll get back to you soon.", {
-          id: "support-submit",
-        });
+        toast.success(
+          "Message sent successfully! We'll get back to you soon.",
+          {
+            id: "support-submit",
+          },
+        );
         setFormData({ name: "", email: "", message: "" });
         onClose();
       }
     } catch (error: any) {
       console.error("Error submitting support form:", error);
       toast.error(
-        error.response?.data?.message || "Failed to send message. Please try again.",
-        { id: "support-submit" }
+        error.response?.data?.message ||
+          "Failed to send message. Please try again.",
+        { id: "support-submit" },
       );
     } finally {
       setIsSubmitting(false);
@@ -57,7 +61,7 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -175,4 +179,3 @@ export default function SupportModal({ isOpen, onClose }: SupportModalProps) {
     </>
   );
 }
-

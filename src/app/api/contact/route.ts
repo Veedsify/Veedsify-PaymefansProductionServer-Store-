@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
           error: true,
           message: "Name, email, and message are required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
           error: true,
           message: "Invalid email format",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -57,18 +57,20 @@ export async function POST(request: NextRequest) {
       // Queue emails for all admins using Inngest
       await Promise.all(
         adminUsers.map((admin) =>
-          inngest.send({
-            name: "contact/email.send",
-            data: {
-              email: admin.email,
-              name: admin.name || "Admin",
-              subject,
-              message: emailMessage,
-            },
-          }).catch((err) => {
-            console.error(`Failed to queue email to ${admin.email}:`, err);
-          })
-        )
+          inngest
+            .send({
+              name: "contact/email.send",
+              data: {
+                email: admin.email,
+                name: admin.name || "Admin",
+                subject,
+                message: emailMessage,
+              },
+            })
+            .catch((err) => {
+              console.error(`Failed to queue email to ${admin.email}:`, err);
+            }),
+        ),
       );
     }
 
@@ -83,7 +85,7 @@ export async function POST(request: NextRequest) {
           created_at: contact.created_at,
         },
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error: any) {
     console.error("Error submitting contact form:", error);
@@ -92,8 +94,7 @@ export async function POST(request: NextRequest) {
         error: true,
         message: "Failed to submit contact form",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
-

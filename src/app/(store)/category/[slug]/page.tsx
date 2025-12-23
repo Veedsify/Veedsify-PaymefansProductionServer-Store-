@@ -27,7 +27,7 @@ export default function CategoryPage() {
 
     const allProducts = productsData.pages.flatMap((page) => page.data);
     const filtered = allProducts.filter(
-      (product) => product.category.name.toLowerCase() === name.toLowerCase()
+      (product) => product.category.name.toLowerCase() === name.toLowerCase(),
     );
 
     return { categoryName: name, products: filtered };

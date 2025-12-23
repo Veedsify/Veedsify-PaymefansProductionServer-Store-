@@ -26,14 +26,17 @@ export default function Home() {
 
     const allProducts = data.pages.flatMap((page) => page.data || []);
 
-    return allProducts.reduce((acc, product) => {
-      const category = product.category.name;
-      if (!acc[category]) {
-        acc[category] = [];
-      }
-      acc[category].push(product);
-      return acc;
-    }, {} as Record<string, StoreProduct[]>);
+    return allProducts.reduce(
+      (acc, product) => {
+        const category = product.category.name;
+        if (!acc[category]) {
+          acc[category] = [];
+        }
+        acc[category].push(product);
+        return acc;
+      },
+      {} as Record<string, StoreProduct[]>,
+    );
   }, [data]);
 
   const categories = Object.keys(categorizedProducts);

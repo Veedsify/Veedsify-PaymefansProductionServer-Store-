@@ -7,9 +7,9 @@ interface NewMessageProps {
   link?: string;
 }
 
-export const NewMessage = ({ 
-  name = "there", 
-  link = "https://paymefans.com/messages" 
+export const NewMessage = ({
+  name = "there",
+  link = "https://paymefans.com/messages",
 }: NewMessageProps) => {
   return (
     <EmailLayout
@@ -23,9 +23,7 @@ export const NewMessage = ({
       secondaryButtonLink="#"
     >
       <Heading style={heading}>Hi {name},</Heading>
-      <Text style={paragraph}>
-        You've received a new message on PayMeFans!
-      </Text>
+      <Text style={paragraph}>You've received a new message on PayMeFans!</Text>
       <Text style={paragraph}>
         Please log in to your account to view and reply to your message. Don't
         miss out on the conversation!

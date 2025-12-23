@@ -1,5 +1,5 @@
 export interface ExtendedWithUser extends NextResponse {
-    user: {
-        userId: number | null;
-    };
+  user: {
+    userId: number | null;
+  };
 }

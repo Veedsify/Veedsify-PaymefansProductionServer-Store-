@@ -5,7 +5,7 @@ import { config } from "@/utils/config";
 
 export async function PUT(
   request: Request,
-  { params }: { params: Promise<{ itemId: string }> }
+  { params }: { params: Promise<{ itemId: string }> },
 ) {
   try {
     const session = await auth();
@@ -16,7 +16,7 @@ export async function PUT(
           error: true,
           message: "Unauthorized",
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -29,7 +29,7 @@ export async function PUT(
           error: true,
           message: "Missing required field: quantity",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -82,7 +82,7 @@ export async function PUT(
           message: result.message,
           data: formattedData,
         },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -94,49 +94,49 @@ export async function PUT(
         error: true,
         message: "Failed to update cart item",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
-    request: Request,
-    { params }: { params: Promise<{ itemId: string }> }
+  request: Request,
+  { params }: { params: Promise<{ itemId: string }> },
 ) {
-    try {
-        const session = await auth();
+  try {
+    const session = await auth();
 
-        if (!session || !session.user) {
-            return NextResponse.json(
-                {
-                    error: true,
-                    message: "Unauthorized",
-                },
-                { status: 401 }
-            );
-        }
-
-        const userId = Number(session.user.id);
-        const cartItemId = Number((await params).itemId);
-
-        const result = await CartService.removeFromCart({
-            userId,
-            cartItemId,
-        });
-
-        if (result.error) {
-            return NextResponse.json(result, { status: 400 });
-        }
-
-        return NextResponse.json(result, { status: 200 });
-    } catch (error) {
-        console.error("Error in DELETE /api/cart/[itemId]:", error);
-        return NextResponse.json(
-            {
-                error: true,
-                message: "Failed to remove cart item",
-            },
-            { status: 500 }
-        );
+    if (!session || !session.user) {
+      return NextResponse.json(
+        {
+          error: true,
+          message: "Unauthorized",
+        },
+        { status: 401 },
+      );
     }
+
+    const userId = Number(session.user.id);
+    const cartItemId = Number((await params).itemId);
+
+    const result = await CartService.removeFromCart({
+      userId,
+      cartItemId,
+    });
+
+    if (result.error) {
+      return NextResponse.json(result, { status: 400 });
+    }
+
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    console.error("Error in DELETE /api/cart/[itemId]:", error);
+    return NextResponse.json(
+      {
+        error: true,
+        message: "Failed to remove cart item",
+      },
+      { status: 500 },
+    );
+  }
 }

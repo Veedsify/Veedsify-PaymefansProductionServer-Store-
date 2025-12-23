@@ -25,4 +25,3 @@ export { CustomEmail } from "./CustomEmail";
 
 // Export the layout component
 export { EmailLayout } from "./components/EmailLayout";
-

@@ -12,7 +12,7 @@ export default function ThemeInitializer() {
     } else {
       // Check system preference
       const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
+        "(prefers-color-scheme: dark)",
       ).matches;
       if (prefersDark) {
         document.documentElement.classList.add("dark");

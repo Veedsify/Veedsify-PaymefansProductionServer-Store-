@@ -12,7 +12,7 @@ export async function GET() {
           error: true,
           message: "Unauthorized. Please login to continue",
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -32,7 +32,7 @@ export async function GET() {
         message: "Orders retrieved successfully",
         data: formattedOrders,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     console.error("Error in GET /api/orders:", error);
@@ -41,7 +41,7 @@ export async function GET() {
         error: true,
         message: error.message || "Failed to retrieve orders",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

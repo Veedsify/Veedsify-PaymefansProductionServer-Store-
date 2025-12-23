@@ -18,7 +18,7 @@ const createTransporter = (): Transporter => {
 
   if (!mailHost || !mailPort || !mailUser || !mailPass) {
     throw new Error(
-      "Missing email configuration. Please set MAIL_HOST, MAIL_PORT, MAIL_USER, and MAIL_PASS environment variables."
+      "Missing email configuration. Please set MAIL_HOST, MAIL_PORT, MAIL_USER, and MAIL_PASS environment variables.",
     );
   }
 

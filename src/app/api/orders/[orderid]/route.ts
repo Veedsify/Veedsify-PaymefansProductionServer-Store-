@@ -4,7 +4,7 @@ import OrderService from "@/server/OrderService";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ orderid: string }> }
+  { params }: { params: Promise<{ orderid: string }> },
 ) {
   try {
     const session = await auth();
@@ -15,7 +15,7 @@ export async function GET(
           error: true,
           message: "Unauthorized. Please login to continue",
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -27,7 +27,7 @@ export async function GET(
           error: true,
           message: "Order ID is required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -53,7 +53,7 @@ export async function GET(
         message: result.message,
         data: formattedOrder,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error: any) {
     console.error("Error in GET /api/orders/[orderid]:", error);
@@ -62,14 +62,14 @@ export async function GET(
         error: true,
         message: error.message || "Failed to retrieve order",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function PATCH(
   request: Request,
-  { params }: { params: Promise<{ orderid: string }> }
+  { params }: { params: Promise<{ orderid: string }> },
 ) {
   try {
     const session = await auth();
@@ -80,7 +80,7 @@ export async function PATCH(
           error: true,
           message: "Unauthorized. Please login to continue",
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -94,7 +94,7 @@ export async function PATCH(
           error: true,
           message: "Order ID is required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -104,7 +104,7 @@ export async function PATCH(
           error: true,
           message: "Status is required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -121,10 +121,10 @@ export async function PATCH(
         {
           error: true,
           message: `Invalid status. Must be one of: ${validStatuses.join(
-            ", "
+            ", ",
           )}`,
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -132,7 +132,7 @@ export async function PATCH(
     const result = await OrderService.updateOrderStatus(
       orderid,
       userId,
-      status
+      status,
     );
 
     if (result.error) {
@@ -147,14 +147,14 @@ export async function PATCH(
         error: true,
         message: error.message || "Failed to update order status",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Promise<{ orderid: string }> }
+  { params }: { params: Promise<{ orderid: string }> },
 ) {
   try {
     const session = await auth();
@@ -165,7 +165,7 @@ export async function DELETE(
           error: true,
           message: "Unauthorized. Please login to continue",
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -177,7 +177,7 @@ export async function DELETE(
           error: true,
           message: "Order ID is required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -196,7 +196,7 @@ export async function DELETE(
         error: true,
         message: error.message || "Failed to cancel order",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

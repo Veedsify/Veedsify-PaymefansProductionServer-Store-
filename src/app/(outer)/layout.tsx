@@ -71,7 +71,7 @@ export default function RootLayout({
                   "dark:bg-gray-900 dark:text-white dark:border-gray-600",
               }}
             />
-        
+
             <main className="flex-1 md:pb-0 ">{children}</main>
             {/* Footer with Terms and Privacy Links */}
             <footer className="w-full bg-black border-t border-white/10">

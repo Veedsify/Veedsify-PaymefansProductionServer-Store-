@@ -50,12 +50,12 @@ export const sendEmailQueue = inngest.createFunction(
             reject({ message: "Email Failed To Send" });
           }
           resolve({ message: "Email Sent Successfully" });
-        }
+        },
       );
     });
 
     return sendEmail;
-  }
+  },
 );
 
 export const sendOrderConfirmationEmail = inngest.createFunction(
@@ -82,7 +82,7 @@ export const sendOrderConfirmationEmail = inngest.createFunction(
           items={items}
           totalAmount={totalAmount}
           shippingAddress={shippingAddress}
-        />
+        />,
       );
     });
 
@@ -110,14 +110,14 @@ export const sendOrderConfirmationEmail = inngest.createFunction(
                   message: "Email Sent Successfully",
                 });
               }
-            }
+            },
           );
-        }
+        },
       );
     });
 
     return result;
-  }
+  },
 );
 
 interface ContactEmailEvent {
@@ -140,7 +140,7 @@ export const sendContactEmail = inngest.createFunction(
           name={name || "there"}
           subject={subject || "Contact Form Submission"}
           message={message || "This is a contact form submission."}
-        />
+        />,
       );
     });
 
@@ -168,12 +168,12 @@ export const sendContactEmail = inngest.createFunction(
                   message: "Email Sent Successfully",
                 });
               }
-            }
+            },
           );
-        }
+        },
       );
     });
 
     return result;
-  }
+  },
 );

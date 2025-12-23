@@ -9,10 +9,7 @@ import { Loader2, ArrowLeft } from "lucide-react";
 import { useCartStore } from "@/stores/cartStore";
 import { useCheckout } from "@/hooks/useCheckout";
 import { useSession } from "next-auth/react";
-import {
-  NIGERIAN_STATES,
-  calculateDeliveryFee,
-} from "@/utils/nigerianStates";
+import { NIGERIAN_STATES, calculateDeliveryFee } from "@/utils/nigerianStates";
 
 type ShippingAddress = {
   name: string;
@@ -142,10 +139,10 @@ export default function CheckoutPage() {
         onError: (error: any) => {
           toast.error(
             error?.response?.data?.message ||
-              "Checkout failed. Please try again."
+              "Checkout failed. Please try again.",
           );
         },
-      }
+      },
     );
   };
 
@@ -417,7 +414,7 @@ export default function CheckoutPage() {
                       <p className="text-sm font-semibold text-pink-600 dark:text-pink-400">
                         ₦{" "}
                         {numeral(item.product.price * item.quantity).format(
-                          "0,0.00"
+                          "0,0.00",
                         )}
                       </p>
                     </div>

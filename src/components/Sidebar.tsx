@@ -83,7 +83,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     if (productsData?.pages) {
       const allProducts = productsData.pages.flatMap((page) => page.data);
       const uniqueCategories = Array.from(
-        new Set(allProducts.map((product) => product.category.name))
+        new Set(allProducts.map((product) => product.category.name)),
       );
       setCategories(uniqueCategories);
     }

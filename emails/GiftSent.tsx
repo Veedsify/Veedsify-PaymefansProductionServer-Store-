@@ -35,7 +35,8 @@ export const GiftSent = ({
         and generous way!
       </Text>
       <Text style={paragraph}>
-        Thank you for being an awesome fan and supporting your favorite creators!
+        Thank you for being an awesome fan and supporting your favorite
+        creators!
       </Text>
       <Text style={paragraph}>
         Best regards,

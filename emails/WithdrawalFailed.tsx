@@ -37,8 +37,8 @@ export const WithdrawalFailed = ({
       )}
       <Text style={paragraph}>
         The funds associated with this withdrawal request have been restored to
-        your account balance. You can check your account balance and submit a new
-        withdrawal request if needed.
+        your account balance. You can check your account balance and submit a
+        new withdrawal request if needed.
       </Text>
       <Text style={paragraph}>
         If you have any questions or concerns about this rejection, please don't
@@ -93,4 +93,3 @@ const strong = {
 };
 
 export default WithdrawalFailed;
-

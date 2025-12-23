@@ -31,17 +31,26 @@ export const CommunityWelcome = ({ name = "there" }: CommunityWelcomeProps) => {
       <Text style={paragraph}>
         <span style={strong}>Here's what you can expect from us:</span>
       </Text>
-      <Text style={listItem}>• A platform to share your exclusive content with your fans</Text>
-      <Text style={listItem}>• Opportunities to earn money through subscriptions and tips</Text>
       <Text style={listItem}>
-        • A community of like-minded creators and fans who support and appreciate your work
+        • A platform to share your exclusive content with your fans
       </Text>
-      <Text style={listItem}>• Connect with other content creators in our group chat</Text>
+      <Text style={listItem}>
+        • Opportunities to earn money through subscriptions and tips
+      </Text>
+      <Text style={listItem}>
+        • A community of like-minded creators and fans who support and
+        appreciate your work
+      </Text>
+      <Text style={listItem}>
+        • Connect with other content creators in our group chat
+      </Text>
       <Text style={listItem}>• Earn 100% of the revenue</Text>
       <Text style={listItem}>
         • A 25% withdrawal fee will be charged as a PayMeFans Creator/Model
       </Text>
-      <Text style={listItem}>• You must add a valid payout method to receive payments</Text>
+      <Text style={listItem}>
+        • You must add a valid payout method to receive payments
+      </Text>
       <Text style={paragraph}>
         <span style={strong}>To get started, simply:</span>
       </Text>

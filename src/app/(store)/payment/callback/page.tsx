@@ -10,7 +10,7 @@ import { useCartStore } from "@/stores/cartStore";
 const PaymentCallback = () => {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<"loading" | "success" | "error">(
-    "loading"
+    "loading",
   );
   const [message, setMessage] = useState("");
   const [orderId, setOrderId] = useState("");
@@ -72,7 +72,7 @@ const PaymentCallback = () => {
       setStatus("error");
       setMessage(
         (verificationError as any)?.response?.data?.message ||
-          "Payment verification failed"
+          "Payment verification failed",
       );
       toast.error("Payment verification failed");
 

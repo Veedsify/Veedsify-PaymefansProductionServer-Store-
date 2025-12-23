@@ -5,7 +5,7 @@ import { config } from "@/utils/config";
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ reference: string }> }
+  { params }: { params: Promise<{ reference: string }> },
 ) {
   try {
     const session = await auth();
@@ -16,7 +16,7 @@ export async function GET(
           error: true,
           message: "Unauthorized. Please login to continue",
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -28,7 +28,7 @@ export async function GET(
           error: true,
           message: "Payment reference is required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -70,7 +70,7 @@ export async function GET(
             order: formattedOrder,
           },
         },
-        { status: 200 }
+        { status: 200 },
       );
     }
 
@@ -82,7 +82,7 @@ export async function GET(
         error: true,
         message: error.message || "Failed to verify payment",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
